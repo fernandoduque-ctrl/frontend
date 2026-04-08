@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 1 — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html" aria-current="page">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main">
+        <h1>Etapa 1 — Identificação e cadastro da empresa</h1>
+        <p class="muted">Matriz, filiais, documentos e identidade visual · ETA: 10–15 min</p>
+        <p>
+          <strong>URL base:</strong> <code>#/wizard/etapa-1/</code> · <strong>Código:</strong>
+          <code>frontend/src/pages/wizard/stage1.tsx</code>
+        </p>
+        <p>
+          Objetivo: registrar como a empresa aparece no sistema, validar dados cadastrais da matriz (com documentos),
+          definir se há filiais, anexar comprovantes e logos, e enviar tudo para validação consultiva antes de liberar
+          etapas seguintes.
+        </p>
+
+        <h2>Índice de passos</h2>
+        <ul class="doc-steps">
+          <li><span class="mono slug">passo-1</span> Identificação do cliente</li>
+          <li><span class="mono slug">passo-2</span> Dados da matriz</li>
+          <li><span class="mono slug">passo-3</span> Estrutura de filiais</li>
+          <li><span class="mono slug">passo-4</span> Identidade visual</li>
+          <li><span class="mono slug">resumo</span> Resumo e envio</li>
+        </ul>
+
+        <div class="pass-block" id="passo-1">
+          <h3><span class="mono">passo-1</span> — Identificação do cliente</h3>
+          <p>Nome amigável usado dentro do sistema para reconhecer a empresa (não substitui razão social nem CNPJ).</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>clientDisplayName</code></td>
+                <td>Sim</td>
+                <td>Identificação interna/comercial no painel e fluxos.</td>
+                <td>Mínimo 3 caracteres. Salvo via API ao concluir o passo; há rascunho local (“Salvar e continuar depois”).</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Ações: <strong>Salvar e continuar</strong> (persiste), <strong>Salvar e continuar depois</strong> (rascunho), <strong>Ver exemplo</strong> (modal).</p>
+        </div>
+
+        <div class="pass-block" id="passo-2">
+          <h3><span class="mono">passo-2</span> — Dados da matriz</h3>
+          <p>Alinha cadastro à Receita Federal: razão social, CNPJ, cartão CNPJ, responsável e contatos. Há link para o site da Receita e validações de formato no cliente.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>legalName</code></td>
+                <td>Sim</td>
+                <td>Razão social da matriz, como no cartão CNPJ.</td>
+                <td>Validação de caracteres permitidos (nome jurídico). Deve refletir o documento oficial.</td>
+              </tr>
+              <tr>
+                <td><code>taxId</code></td>
+                <td>Condicional</td>
+                <td>CNPJ da matriz (digitado).</td>
+                <td>Máscara <code>00.000.000/0001-00</code>. Pode ficar vazio se só houver cartão anexado; se preenchido, exige 14 dígitos e dígitos verificadores válidos.</td>
+              </tr>
+              <tr>
+                <td>Upload cartão CNPJ</td>
+                <td>Recomendado</td>
+                <td>Comprovante PDF/imagem da matriz.</td>
+                <td>Categoria de upload <code>CNPJ_MATRIX</code>. Após envio, a UI pode alertar para conferir CNPJ digitado × documento.</td>
+              </tr>
+              <tr>
+                <td>Documento ilegível + observação</td>
+                <td>Não</td>
+                <td>Sinalizar qualidade e orientar o consultor.</td>
+                <td>Checkbox “ilegível” e texto livre; persistidos no upload via <code>PUT /uploads/:id</code> (<code>illegible</code>, <code>userNote</code>).</td>
+              </tr>
+              <tr>
+                <td><code>responsibleName</code></td>
+                <td>Sim</td>
+                <td>Quem presta as informações da folha.</td>
+                <td>Texto livre; usado para contato e responsabilização na implantação.</td>
+              </tr>
+              <tr>
+                <td><code>responsibleCpf</code></td>
+                <td>Sim</td>
+                <td>CPF do responsável.</td>
+                <td>Máscara e validação de dígitos no front; servidor também valida ao salvar.</td>
+              </tr>
+              <tr>
+                <td><code>contactPhone</code></td>
+                <td>Sim</td>
+                <td>Telefone com DDD (ideal com WhatsApp).</td>
+                <td>Máscara BR; validação de 10 ou 11 dígitos (fixo/celular).</td>
+              </tr>
+              <tr>
+                <td><code>contactEmail</code></td>
+                <td>Sim</td>
+                <td>E-mail operacional da empresa.</td>
+                <td>Tipo e-mail; pode aparecer alerta de “sugestão de correção” se o domínio parecer digitado errado; servidor pode bloquear domínios incorretos.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block" id="passo-3">
+          <h3><span class="mono">passo-3</span> — Estrutura de filiais</h3>
+          <p>Indica se a operação tem filiais com empregados e, em caso positivo, cadastra cada filial e anexa cartões CNPJ.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo / elemento</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>hasBranches</code></td>
+                <td>Sim</td>
+                <td>Define se existem filiais a cadastrar.</td>
+                <td>Radio Sim/Não. Persistido na empresa; se Sim, exibe card de filiais e uploads.</td>
+              </tr>
+              <tr>
+                <td><code>name</code> (nova filial)</td>
+                <td>Sim</td>
+                <td>Nome da filial na operação.</td>
+                <td>Formulário “Nova filial”; enviado ao cadastrar filial.</td>
+              </tr>
+              <tr>
+                <td><code>legalName</code> (filial)</td>
+                <td>Não</td>
+                <td>Razão social da filial, se diferente do nome curto.</td>
+                <td>Opcional no formulário de filial.</td>
+              </tr>
+              <tr>
+                <td><code>taxId</code> (filial)</td>
+                <td>Opcional no form</td>
+                <td>CNPJ da filial.</td>
+                <td>Máscara CNPJ; não pode duplicar CNPJ já usado em outra filial da empresa (validação no cliente).</td>
+              </tr>
+              <tr>
+                <td>Anexar cartão por filial</td>
+                <td>Recomendado</td>
+                <td>Comprovante CNPJ de cada filial.</td>
+                <td>Upload categoria <code>CNPJ_BRANCH</code> por linha da tabela. Limite global de <strong>10 arquivos</strong> de CNPJ de filial por empresa.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Colunas da tabela de filiais: Nome, CNPJ, ação de anexar PDF/imagem.</p>
+        </div>
+
+        <div class="pass-block" id="passo-4">
+          <h3><span class="mono">passo-4</span> — Identidade visual</h3>
+          <p>Define se cada filial usa marca diferente e onde enviar logotipos (empresa única ou uma marca por filial).</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo / ação</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>hasDifferentBranchLogos</code></td>
+                <td>Sim</td>
+                <td>Personalização de holerites/relatórios por filial.</td>
+                <td>Radio Sim/Não. Se Não: um upload de logo para toda a empresa (escopo <code>COMPANY</code>). Se Sim: upload por filial cadastrada (escopo <code>BRANCH</code> + <code>branchId</code>).</td>
+              </tr>
+              <tr>
+                <td>Upload logotipo</td>
+                <td>Não</td>
+                <td>PNG ou JPG da marca.</td>
+                <td>Formatos aceitos conforme constante <code>ACCEPT_LOGO</code> no código; envio dispara mutação de logo no backend.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Se “logos diferentes por filial” estiver ativo e não houver filiais, a UI alerta para voltar ao passo 3.</p>
+        </div>
+
+        <div class="pass-block" id="resumo">
+          <h3><span class="mono">resumo</span> — Resumo da etapa</h3>
+          <p>Consolida checklist vindo de <code>GET /wizard/stage-1/summary</code> e permite enviar a etapa para validação consultiva.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Chave do checklist (API)</th>
+                <th>Significado na tela</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>clientNamed</code></td>
+                <td>Nome do cliente / empresa informado.</td>
+              </tr>
+              <tr>
+                <td><code>matrixFilled</code></td>
+                <td>Dados da matriz preenchidos.</td>
+              </tr>
+              <tr>
+                <td><code>responsibleOk</code></td>
+                <td>Responsável identificado.</td>
+              </tr>
+              <tr>
+                <td><code>branchesDefined</code></td>
+                <td>Estrutura de filiais definida.</td>
+              </tr>
+              <tr>
+                <td><code>documentsAttached</code></td>
+                <td>Documentos anexados (CNPJ etc.).</td>
+              </tr>
+              <tr>
+                <td><code>brandingOk</code></td>
+                <td>Identidade visual (logotipo quando aplicável).</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Botão principal: <strong>Enviar etapa 1 para validação</strong>. Após envio, cálculos de folha permanecem bloqueados até aprovação do consultor.</p>
+        </div>
+
+        <div class="flow-box">
+          <strong>Resultado técnico:</strong> entidade empresa (matriz/filiais) criada ou atualizada; base para eSocial nas
+          etapas seguintes; folha só avança após validação consultiva.
+        </div>
+        <p><a href="wizard-intro.html">← Visão geral do wizard</a> · <a href="etapa-2.html">Etapa 2 →</a></p>
+      </main>
+    </div>
+  </body>
+</html>

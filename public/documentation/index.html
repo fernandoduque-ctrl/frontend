@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Folha Digital Sólides — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="doc-body--story">
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html" aria-current="page">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main doc-main--wide">
+        <header class="doc-hero">
+          <p class="doc-hero__eyebrow">Wizard de parametrização</p>
+          <h1 class="doc-hero__title">Bem-vindo ao guia da Folha Digital Sólides</h1>
+          <p class="doc-hero__lede">
+            Uma leitura pensada para <strong>negócio, produto e diretoria</strong>: entenda o que estamos entregando,
+            por que importa e como as seis etapas do wizard transformam caos de planilhas em jornada guiada — sem pedir
+            que você decore sigla de sistema.
+          </p>
+          <div class="doc-pill-row">
+            <span class="doc-pill">Tom leve, conteúdo sério</span>
+            <span class="doc-pill">Pronto para apresentar</span>
+          </div>
+        </header>
+
+        <p class="fun-note">
+          Se você veio parar aqui por engano procurando o app: ele roda no Vite com rotas tipo
+          <code>#/dashboard</code>. Esta pasta é só documentação estática — tipo “slide que não depende do PowerPoint travar”.
+        </p>
+
+        <h2>Três razões para a diretoria apostar nesta abordagem</h2>
+        <div class="value-grid">
+          <div class="value-card">
+            <div class="value-card__icon" aria-hidden="true">🧭</div>
+            <h3>Rumo claro</h3>
+            <p>
+              Cada etapa tem começo, meio e “o que falta para fechar”. Menos dependência de reunião informal para saber
+              o status do projeto de folha.
+            </p>
+          </div>
+          <div class="value-card">
+            <div class="value-card__icon" aria-hidden="true">🛡️</div>
+            <h3>Risco menor</h3>
+            <p>
+              Documentos e decisões ficam associados ao fluxo. Na hora do pente fino — ou de uma auditoria — não
+              precisamos caçar e-mail de seis meses atrás.
+            </p>
+          </div>
+          <div class="value-card">
+            <div class="value-card__icon" aria-hidden="true">🤝</div>
+            <h3>Alinhamento RH × TI × consultoria</h3>
+            <p>
+              O mesmo roteiro serve para explicar ao cliente externo, ao time interno e à mesa executiva: menos
+              “tradutor humano” no meio.
+            </p>
+          </div>
+        </div>
+
+        <h2>Comece por aqui</h2>
+        <div class="cta-row">
+          <a class="cta-tile" href="diretoria.html">
+            <strong>O que vamos entregar</strong>
+            <span>Texto completo para reunião de diretoria: capítulos, valor, glossário e próximos passos.</span>
+          </a>
+          <a class="cta-tile" href="wizard-intro.html">
+            <strong>Wizard em português claro</strong>
+            <span>Visão geral das seis etapas + como navegar no app.</span>
+          </a>
+          <a class="cta-tile" href="fluxos.html">
+            <strong>Jornada do cliente</strong>
+            <span>Fluxo linear recomendado e dependências entre etapas.</span>
+          </a>
+        </div>
+
+        <h2>Mapa do site (documentação)</h2>
+        <ul>
+          <li>
+            <a href="diretoria.html"><strong>Apresentação à diretoria</strong></a> — narrativa executiva detalhada; ideal para
+            projetor ou PDF impresso.
+          </li>
+          <li>
+            <a href="wizard-intro.html">Visão geral do wizard</a> — resumo das etapas e links para cada capítulo.
+          </li>
+          <li>
+            <a href="etapa-1.html">Etapas 1 a 6</a> — descrição passo a passo (campos, URLs, regras) alinhada ao frontend.
+          </li>
+          <li>
+            <a href="fluxos.html">Fluxos do usuário</a> — macrofluxo login → dashboard → wizard.
+          </li>
+          <li>
+            <span class="badge">Tech</span>
+            <a href="projeto.html">Stack e pastas</a>, <a href="rotas-shell.html">rotas</a>,
+            <a href="telas.html">telas</a> — apêndice para desenvolvimento.
+          </li>
+        </ul>
+
+        <div class="doc-card">
+          <p style="margin-top: 0">
+            <strong>Como abrir no navegador:</strong> com o frontend rodando (<code>npm run dev</code> no projeto Vite),
+            acesse
+            <code>http://localhost:5173/documentation/index.html</code>
+            (ou a URL base do seu ambiente + <code>/documentation/index.html</code>).
+          </p>
+          <p class="muted" style="margin-bottom: 0">
+            A API expõe também o Swagger em <code>/api/docs</code> — útil para quem valida integrações, não para a
+            apresentação de negócio.
+          </p>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

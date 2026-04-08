@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 3 — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html" aria-current="page">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main">
+        <h1>Etapa 3 — Base histórica e trabalhadores</h1>
+        <p class="muted">Documentos e conferência de risco · ETA: 20–30 min</p>
+        <p>
+          <strong>URL base:</strong> <code>#/wizard/etapa-3/</code> · <strong>Código:</strong>
+          <code>frontend/src/pages/wizard/stage3.tsx</code>
+        </p>
+        <p>
+          Objetivo: reunir evidências da base (folhas, afastamentos, dependentes, fichas, desoneração, férias) para
+          conferência — não substitui importação automática da folha. Depende das etapas 1 e 2 aprovadas.
+        </p>
+
+        <h2>Índice de passos</h2>
+        <ul class="doc-steps">
+          <li><span class="mono slug">passo-1</span> Entrada + checklist</li>
+          <li><span class="mono slug">passo-2</span> Pensão e ofícios</li>
+          <li><span class="mono slug">passo-3</span> Folha últimos 3 meses</li>
+          <li><span class="mono slug">passo-4</span> Afastamentos</li>
+          <li><span class="mono slug">passo-5</span> Dependentes</li>
+          <li><span class="mono slug">passo-6</span> Fichas de registro</li>
+          <li><span class="mono slug">passo-7</span> Desoneração</li>
+          <li><span class="mono slug">passo-8</span> Férias</li>
+          <li><span class="mono slug">resumo</span> Envio</li>
+        </ul>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-1</span> — Entrada</h3>
+          <p>Introdução e, se disponível, checklist vindo de <code>GET /wizard/stage-3/summary</code>.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Chave checklist (API)</th>
+                <th>Rótulo na UI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>pension</code></td>
+                <td>Pensionistas validados</td>
+              </tr>
+              <tr>
+                <td><code>historicalThreeMonths</code></td>
+                <td>Histórico de folha conferido (3 competências)</td>
+              </tr>
+              <tr>
+                <td><code>leavesMapped</code></td>
+                <td>Afastamentos mapeados</td>
+              </tr>
+              <tr>
+                <td><code>dependents</code></td>
+                <td>Dependentes validados</td>
+              </tr>
+              <tr>
+                <td><code>registry</code></td>
+                <td>Fichas de registro analisadas</td>
+              </tr>
+              <tr>
+                <td><code>taxRelief</code></td>
+                <td>Desoneração informada (se aplicável)</td>
+              </tr>
+              <tr>
+                <td><code>vacations</code></td>
+                <td>Férias conferidas</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-2</span> — Pensão alimentícia e ofícios</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo / ação</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Possui pensão ativa? (estado local)</td>
+                <td>Sim para avançar</td>
+                <td>Determina se uploads são necessários.</td>
+                <td>Radio Sim/Não. Botão “Salvar pensão” → <code>PUT /wizard/stage-3/pension-config</code> com <code>hasActivePension</code>.</td>
+              </tr>
+              <tr>
+                <td>Upload lista pensionistas</td>
+                <td>Se Sim</td>
+                <td>Relação de pensionistas.</td>
+                <td>Categoria <code>PENSION_LIST</code>.</td>
+              </tr>
+              <tr>
+                <td>Upload ofícios judiciais</td>
+                <td>Se Sim</td>
+                <td>Documentos que embasam descontos.</td>
+                <td>Categoria <code>COURT_ORDERS</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-3</span> — Folha dos últimos 3 meses</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo / ação</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Competência</td>
+                <td>Por arquivo</td>
+                <td>Mês de referência do arquivo.</td>
+                <td><code>prompt('Competência (AAAA-MM)?')</code> antes do upload; associada ao registro no backend.</td>
+              </tr>
+              <tr>
+                <td>Arquivo da folha</td>
+                <td>Por competência</td>
+                <td>Conferência de totais e estrutura.</td>
+                <td>Upload categoria <code>HISTORICAL_PAYROLL</code> + <code>POST /wizard/stage-3/historical-payroll-files</code> com <code>competence</code> e <code>uploadedFileId</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Um arquivo por competência; uso declarado como base de conferência, não importação direta automática.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-4</span> — Profissionais afastados</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Há afastamentos a relatar?</td>
+                <td>Sim</td>
+                <td>Decidir entre fluxo vazio ou detalhado.</td>
+                <td>Se Não: botão confirma sem registros. Se Sim: upload opcional + formulário.</td>
+              </tr>
+              <tr>
+                <td>Upload relação</td>
+                <td>Não</td>
+                <td>Planilha/PDF em lote.</td>
+                <td>Categoria <code>LEAVE_RECORDS</code>.</td>
+              </tr>
+              <tr>
+                <td><code>employeeName</code></td>
+                <td>Sim (modal)</td>
+                <td>Nome do colaborador.</td>
+                <td><code>POST /leave-records</code></td>
+              </tr>
+              <tr>
+                <td><code>leaveType</code></td>
+                <td>Sim</td>
+                <td>Tipo (INSS, acidente, licença etc.).</td>
+                <td>Texto livre.</td>
+              </tr>
+              <tr>
+                <td><code>startDate</code></td>
+                <td>Sim</td>
+                <td>Início do afastamento.</td>
+                <td>DatePicker → ISO no envio.</td>
+              </tr>
+              <tr>
+                <td><code>expectedReturnDate</code></td>
+                <td>Não</td>
+                <td>Previsão de retorno.</td>
+                <td>Opcional; ISO se preenchido.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Tabela: Colaborador, Tipo, Início, Retorno previsto.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-5</span> — Dependentes</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Há dependentes?</td>
+                <td>Sim</td>
+                <td>Abrir cadastro ou confirmar ausência.</td>
+                <td>Radio Sim/Não; se Não, confirmação sem linhas.</td>
+              </tr>
+              <tr>
+                <td>Upload planilha/PDF</td>
+                <td>Não</td>
+                <td>Relação em arquivo.</td>
+                <td>Categoria <code>DEPENDENTS</code>; aceita PDF, CSV, XLS, XLSX.</td>
+              </tr>
+              <tr>
+                <td><code>dependentName</code></td>
+                <td>Sim</td>
+                <td>Nome do dependente.</td>
+                <td><code>POST /dependent-records</code></td>
+              </tr>
+              <tr>
+                <td><code>cpf</code></td>
+                <td>Não</td>
+                <td>CPF com validação de dígitos.</td>
+                <td>Máscara; só dígitos no payload.</td>
+              </tr>
+              <tr>
+                <td><code>dependencyType</code></td>
+                <td>Sim</td>
+                <td>Categoria IRRF/benefícios.</td>
+                <td>Valores: <code>FILHO_FILHA</code>, <code>CONJUGE</code>, <code>ENTEADO</code>, <code>PAI_MAE</code>, <code>IRMAO</code>, <code>OUTRO</code>.</td>
+              </tr>
+              <tr>
+                <td><code>motherName</code></td>
+                <td>Não</td>
+                <td>Nome da mãe (cadastro civil).</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>birthDate</code></td>
+                <td>Não</td>
+                <td>Data de nascimento.</td>
+                <td>Formato <code>YYYY-MM-DD</code> no envio.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Tabela: Nome, CPF, Tipo.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-6</span> — Fichas de registro</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Ação</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Enviar ficha</td>
+                <td>Arquivar fichas cadastrais para conferência com etapa 2.</td>
+                <td>Upload + <code>POST /wizard/stage-3/employee-registry-files</code> com <code>uploadedFileId</code>; categoria <code>EMPLOYEE_REGISTRY</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-7</span> — Desoneração</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>hasTaxRelief</code></td>
+                <td>Sim</td>
+                <td>Indica se a empresa está em desoneração da folha.</td>
+                <td>Radio Sim/Não → <code>PUT /wizard/stage-3/tax-relief</code>.</td>
+              </tr>
+              <tr>
+                <td><code>notes</code></td>
+                <td>Não</td>
+                <td>Contexto ou referência legal.</td>
+                <td>Textarea.</td>
+              </tr>
+              <tr>
+                <td>Documentos comprobatórios</td>
+                <td>Recomendado se Sim</td>
+                <td>PGDAS, decisões, etc.</td>
+                <td>Upload múltiplo categoria <code>TAX_RELIEF</code> (PDF/imagem).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-8</span> — Férias</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>employeeName</code></td>
+                <td>Sim</td>
+                <td>Colaborador.</td>
+                <td><code>POST /vacation-records</code></td>
+              </tr>
+              <tr>
+                <td><code>accrualStartDate</code></td>
+                <td>Sim</td>
+                <td>Início do período aquisitivo.</td>
+                <td>DatePicker → <code>YYYY-MM-DD</code>.</td>
+              </tr>
+              <tr>
+                <td><code>accrualEndDate</code></td>
+                <td>Sim</td>
+                <td>Fim do período aquisitivo.</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>takenDays</code></td>
+                <td>Não</td>
+                <td>Dias de férias já gozados.</td>
+                <td>Padrão 0; número.</td>
+              </tr>
+              <tr>
+                <td><code>pendingDays</code></td>
+                <td>Não</td>
+                <td>Dias pendentes.</td>
+                <td>Padrão 0; número.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Tabela: Colaborador, Aquisitivo (intervalo), Gozadas, Pendentes.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">resumo</span></h3>
+          <p>Tabela comparativa formulário tradicional × wizard; checklist e contadores de <code>s3.counts</code>: <code>historicalPayrollFiles</code>, <code>leaves</code>, <code>dependents</code>, <code>registry</code>, <code>vacations</code>.</p>
+          <p class="doc-note">Botão: <strong>Enviar etapa 3 para validação</strong> → <code>POST /wizard/stages/3/submit</code>.</p>
+        </div>
+
+        <p><a href="etapa-2.html">← Etapa 2</a> · <a href="etapa-4.html">Etapa 4 →</a></p>
+      </main>
+    </div>
+  </body>
+</html>

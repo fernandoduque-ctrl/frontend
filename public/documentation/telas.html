@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Todas as telas — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html" aria-current="page">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main">
+        <h1>Todas as telas (fora do detalhe por passo do wizard) <span class="badge">Apêndice técnico</span></h1>
+        <div class="doc-card">
+          <p style="margin: 0">
+            Página para desenvolvimento. Para diretoria, prefira
+            <a href="diretoria.html">O que vamos entregar</a> e
+            <a href="fluxos.html">Jornada do cliente</a>.
+          </p>
+        </div>
+        <p>
+          Abaixo, cada seção corresponde a um componente de página em <code>src/pages/</code> e à rota
+          típica em hash. O conteúdo interno dos passos do wizard está nas páginas
+          <a href="etapa-1.html">etapa 1</a> a <a href="etapa-6.html">etapa 6</a>.
+        </p>
+
+        <h2 id="login">Login <span class="badge">público</span></h2>
+        <p><strong>Rota:</strong> <code>#/login</code> · <strong>Arquivo:</strong> <code>LoginPage.tsx</code></p>
+        <p>Autenticação do usuário; após sucesso, redirecionamento para área autenticada (ex. dashboard).</p>
+
+        <h2 id="dashboard">Dashboard</h2>
+        <p><strong>Rota:</strong> <code>#/dashboard</code> · <strong>Arquivo:</strong> <code>DashboardPage.tsx</code></p>
+        <p>
+          Ponto de entrada após login: visão geral e atalhos para wizard, uploads ou outras áreas conforme
+          implementado na página.
+        </p>
+
+        <h2 id="settings">Configurações</h2>
+        <p><strong>Rota:</strong> <code>#/settings</code> · <strong>Arquivo:</strong> <code>SettingsPage.tsx</code></p>
+        <p>Ajustes de perfil, contexto de empresa ou preferências ligadas à sessão.</p>
+
+        <h2 id="uploads">Uploads</h2>
+        <p><strong>Rota:</strong> <code>#/uploads</code> · <strong>Arquivo:</strong> <code>UploadsPage.tsx</code></p>
+        <p>Listagem ou gestão de arquivos enviados (documentos do wizard ou uso geral), integrada à API de uploads.</p>
+
+        <h2 id="wizard-home">Hub do wizard</h2>
+        <p><strong>Rota:</strong> <code>#/wizard</code> · <strong>Arquivo:</strong> <code>WizardHomePage.tsx</code></p>
+        <p>
+          Visão das etapas 1–6, navegação para cada etapa e contexto do progresso de parametrização.
+        </p>
+
+        <h2 id="wizard-stage">Layout de uma etapa</h2>
+        <p><strong>Rota:</strong> <code>#/wizard/etapa-&lt;N&gt;/&lt;passo|resumo&gt;</code> · <strong>Layout:</strong> <code>WizardStageLayout.tsx</code></p>
+        <p>
+          Cabeçalho com título/subtítulo da etapa (de <code>stageMeta</code>), tempo estimado e área para
+          o conteúdo do passo atual (<code>StepOutlet</code> → <code>StepContent</code> → <code>stageN.tsx</code>).
+        </p>
+
+        <h2 id="lote-esocial">Lote eSocial (etapa 6)</h2>
+        <p><strong>Rota:</strong> <code>#/wizard/etapa-6/lote/:batchId</code> · <strong>Arquivo:</strong> <code>EsocialLotePage.tsx</code></p>
+        <p>
+          Tela dedicada a um lote de importação: pré-visualização, status ou ações associadas ao
+          identificador do lote na URL.
+        </p>
+
+        <h2 id="notfound">Não encontrado</h2>
+        <p><strong>Rota:</strong> fallback dentro do shell autenticado · <strong>Arquivo:</strong> <code>NotFoundPage.tsx</code></p>
+        <p>Exibida quando a URL não corresponde a nenhuma rota definida.</p>
+      </main>
+    </div>
+  </body>
+</html>

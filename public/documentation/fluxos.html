@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jornada do cliente — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="doc-body--story">
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html" aria-current="page">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main doc-main--wide">
+        <h1>Jornada do cliente</h1>
+        <p class="muted">Antigo “Fluxos do usuário” — mesma informação, título pensado para quem apresenta para negócio.</p>
+        <div class="flow-box">
+          <strong>Leitura rápida para diretoria:</strong> a ordem abaixo é o caminho feliz — login, painel, depois o
+          wizard das seis etapas. Na prática, o consultor pode pausar entre etapas para validar dados; o importante é
+          que <em>nada é “mágico”</em>: cada bloco tem lugar na sequência.
+          <a href="diretoria.html" style="display: inline-block; margin-top: 0.5rem">Ver narrativa executiva completa →</a>
+        </div>
+        <p>
+          Visão linear de como as telas se encaixam na jornada de parametrização. A ordem abaixo é a
+          recomendada pelo produto; o backend e o time consultivo podem exigir aprovações entre etapas.
+        </p>
+        <h2>1. Acesso e painel</h2>
+        <pre><code>Login (#/login)
+    → Dashboard (#/dashboard)
+    → (opcional) Configurações (#/settings), Uploads (#/uploads)</code></pre>
+        <h2>2. Wizard completo (macrofluxo)</h2>
+        <pre><code>Hub (#/wizard)
+    → Etapa 1 … Etapa 6 (cada uma: passo-1 → … → resumo ou passo final)
+    → Envio / validação por etapa conforme botões na UI</code></pre>
+        <div class="doc-card">
+          <strong>Dependência lógica (negócio):</strong>
+          <ol style="margin-bottom: 0">
+            <li>Empresa e filiais definidas antes de estrutura operacional consistente.</li>
+            <li>Estrutura (etapa 2) usada em cadastros e rubricas nas etapas seguintes.</li>
+            <li>Base histórica (3) e benefícios/rubricas (4–5) alimentam conferências na importação eSocial (6).</li>
+          </ol>
+        </div>
+        <h2>3. Fluxo dentro de uma etapa</h2>
+        <ol>
+          <li>Usuário abre <code>#/wizard/etapa-N</code> (vai para <code>passo-1</code>).</li>
+          <li>Navega por passos via menu do <code>WizardStageLayout</code> ou ações na própria página.</li>
+          <li>No <code>resumo</code> (etapas 1–5), revisa checklist e dispara envio para validação quando disponível.</li>
+          <li>Etapa 6 encerra em status do lote; lotes específicos podem abrir em <code>…/lote/:batchId</code>.</li>
+        </ol>
+        <h2>4. Erros e rotas desconhecidas</h2>
+        <p>
+          URL autenticada inválida → <code>NotFoundPage</code>. Sessão expirada → fluxo típico do
+          <code>ProtectedRoute</code> (ex.: retorno ao login).
+        </p>
+        <p><a href="index.html">← Índice da documentação</a></p>
+      </main>
+    </div>
+  </body>
+</html>

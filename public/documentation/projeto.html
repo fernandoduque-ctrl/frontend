@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Visão do projeto — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html" aria-current="page">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main">
+        <h1>Visão do projeto <span class="badge">Apêndice técnico</span></h1>
+        <div class="doc-card">
+          <p style="margin: 0">
+            Esta página é para <strong>desenvolvedores e arquitetos</strong>. Para narrativa de negócio e diretoria, use
+            <a href="diretoria.html">O que vamos entregar</a> ou <a href="index.html">Início</a>.
+          </p>
+        </div>
+        <p>
+          O frontend é um assistente de <strong>parametrização de folha</strong> para o produto
+          Folha Digital Sólides: conduz o cliente por etapas (empresa, estrutura operacional,
+          base histórica, benefícios, rubricas e importação eSocial), com textos e checklists
+          alinhados ao processo consultivo.
+        </p>
+        <h2>Stack técnica</h2>
+        <ul>
+          <li><strong>React 18</strong> + <strong>TypeScript</strong></li>
+          <li><strong>Vite</strong> como bundler e dev server</li>
+          <li><strong>React Router</strong> em modo <code>HashRouter</code> (URLs com <code>#</code>)</li>
+          <li><strong>Ant Design (antd)</strong> para UI</li>
+          <li><strong>React Query</strong> (@tanstack/react-query) para dados remotos</li>
+          <li><strong>React Hook Form</strong> + <strong>Zod</strong> onde há formulários validados</li>
+          <li><strong>Axios</strong> via serviço de API</li>
+        </ul>
+        <h2>Pastas relevantes (<code>src/</code>)</h2>
+        <ul>
+          <li><code>pages/</code> — páginas por rota; <code>pages/wizard/</code> contém <code>stage1.tsx</code> … <code>stage6.tsx</code>, <code>StepContent.tsx</code>, <code>StepOutlet.tsx</code>.</li>
+          <li><code>layouts/</code> — <code>AppShell</code> (menu lateral + conteúdo), <code>WizardStageLayout</code> (cabeçalho da etapa, tempo estimado).</li>
+          <li><code>components/</code> — <code>ProtectedRoute</code>, componentes reutilizáveis do wizard.</li>
+          <li><code>constants/</code> — <code>stageMeta.ts</code> (títulos, subtítulos, lista de passos por etapa).</li>
+          <li><code>utils/</code> — <code>wizardSteps.ts</code>, <code>brForm.ts</code> (validações BR), etc.</li>
+          <li><code>services/</code> — autenticação e cliente HTTP.</li>
+        </ul>
+        <h2>Autenticação</h2>
+        <p>
+          Rotas dentro de <code>ProtectedRoute</code> exigem sessão válida (JWT). A página de
+          <a href="telas.html#login">login</a> é pública. Detalhes de rotas em
+          <a href="rotas-shell.html">Rotas e shell</a>.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>

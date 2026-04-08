@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 6 — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html" aria-current="page">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main">
+        <h1>Etapa 6 — Importação histórica eSocial</h1>
+        <p class="muted">Staging, pré-visualização e confirmação · ETA: 30–45 min</p>
+        <p>
+          <strong>URL base:</strong> <code>#/wizard/etapa-6/</code> · <strong>Código:</strong>
+          <code>frontend/src/pages/wizard/stage6.tsx</code>
+        </p>
+        <p>
+          Objetivo: simular (neste MVP) o fluxo completo de coleta governamental — certificado, período, eventos,
+          processamento em lote, pré-visualização, confirmação explícita e acompanhamento. O acesso é bloqueado pelo
+          backend quando faltam pré-requisitos (<code>GET /wizard/stage-6/access</code>), exceto no passo 1 informativo.
+        </p>
+
+        <h2>Índice de passos</h2>
+        <ul class="doc-steps">
+          <li><span class="mono slug">passo-1</span> Entrada e pré-requisitos</li>
+          <li><span class="mono slug">passo-2</span> Certificado digital</li>
+          <li><span class="mono slug">passo-3</span> Período</li>
+          <li><span class="mono slug">passo-4</span> Eventos</li>
+          <li><span class="mono slug">passo-5</span> Processamento do lote</li>
+          <li><span class="mono slug">passo-6</span> Pré-visualização</li>
+          <li><span class="mono slug">passo-7</span> Confirmação</li>
+          <li><span class="mono slug">passo-8</span> Status</li>
+        </ul>
+
+        <h3>Tela adicional</h3>
+        <p>
+          <strong>Rota:</strong> <code>#/wizard/etapa-6/lote/:batchId</code> · Página
+          <code>EsocialLotePage.tsx</code> — detalhe do lote fora do fluxo linear.
+        </p>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-1</span> — Entrada</h3>
+          <p>Explica o escopo da importação (vínculos S-2200/S-2300, remunerações S-1200, etc.) e lista bloqueios quando <code>access.allowed === false</code>.</p>
+          <p class="doc-note">Sem campos de formulário; botão “Iniciar importação” só habilita se o acesso for permitido.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-2</span> — Certificado digital</h3>
+          <p>Estado em memória (React) usado no corpo do lote no passo 5 — não é um <code>Form.Item</code> nomeado, mas são os parâmetros enviados à API.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo (estado)</th>
+                <th>Opções / formato</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>certificateType</code> (<code>cert.type</code>)</td>
+                <td><code>A1</code> | <code>A3</code></td>
+                <td>Tipo de certificado.</td>
+                <td>Radio; A1 com upload .pfx (simulado), A3 token/cartão (simulado).</td>
+              </tr>
+              <tr>
+                <td><code>certificateTaxId</code> (<code>cert.cnpj</code>)</td>
+                <td>Texto (CNPJ)</td>
+                <td>CNPJ vinculado ao certificado.</td>
+                <td>Input texto; em produção deve bater com o da empresa.</td>
+              </tr>
+              <tr>
+                <td><code>environment</code> (<code>cert.env</code>)</td>
+                <td><code>PRODUCTION</code> | <code>RESTRICTED_PRODUCTION</code></td>
+                <td>Ambiente eSocial.</td>
+                <td>Select: Produção ou Produção restrita.</td>
+              </tr>
+              <tr>
+                <td>Senha do certificado</td>
+                <td>—</td>
+                <td>Autenticação na operação.</td>
+                <td><code>Input.Password</code>; mensagem na UI: não persistida de forma durável neste MVP.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Dica de teste na UI: fluxo com tipo <code>A1_EXPIRED_SIM</code> para simular bloqueio por validade (quando implementado no backend).</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-3</span> — Período da importação</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Data inicial (<code>period.start</code>)</td>
+                <td>Início do histórico a buscar.</td>
+                <td><code>DatePicker</code> → ISO em <code>periodStart</code> no lote.</td>
+              </tr>
+              <tr>
+                <td>Data final (<code>period.end</code>)</td>
+                <td>Fim do histórico.</td>
+                <td>Alerta se posterior a “hoje”; recomenda-se até competência atual.</td>
+              </tr>
+              <tr>
+                <td>Amplitude (meses)</td>
+                <td>Transparência de esforço.</td>
+                <td>Calculada na UI; alerta se &gt; 36 meses.</td>
+              </tr>
+              <tr>
+                <td>Validação de ordem</td>
+                <td>Evitar intervalo inválido.</td>
+                <td>Erro se início &gt; fim.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-4</span> — Eventos selecionados</h3>
+          <p>Valores enviados em <code>selectedEvents</code> (sempre inclui obrigatórios pelo front).</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Valor enviado</th>
+                <th>Rótulo na UI</th>
+                <th>Obrigatório</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>trabalhadores</code></td>
+                <td>Cadastros de trabalhadores (vínculos)</td>
+                <td>Sim (checkbox desabilitado)</td>
+              </tr>
+              <tr>
+                <td><code>remuneracoes</code></td>
+                <td>Remunerações</td>
+                <td>Sim</td>
+              </tr>
+              <tr>
+                <td><code>pagamentos</code></td>
+                <td>Pagamentos</td>
+                <td>Não</td>
+              </tr>
+              <tr>
+                <td><code>afastamentos</code></td>
+                <td>Afastamentos</td>
+                <td>Não</td>
+              </tr>
+              <tr>
+                <td><code>ferias</code></td>
+                <td>Férias</td>
+                <td>Não</td>
+              </tr>
+              <tr>
+                <td><code>desligamentos</code></td>
+                <td>Desligamentos</td>
+                <td>Não</td>
+              </tr>
+              <tr>
+                <td><code>tabelas</code></td>
+                <td>Tabelas vigentes (quando aplicável)</td>
+                <td>Não</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-5</span> — Processamento</h3>
+          <p>Monta o corpo do lote e dispara o pipeline simulado.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo no JSON</th>
+                <th>Origem na UI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>certificateType</code></td>
+                <td>Passo 2</td>
+              </tr>
+              <tr>
+                <td><code>certificateTaxId</code></td>
+                <td>Passo 2 (opcional no payload se vazio)</td>
+              </tr>
+              <tr>
+                <td><code>environment</code></td>
+                <td>Passo 2</td>
+              </tr>
+              <tr>
+                <td><code>periodStart</code> / <code>periodEnd</code></td>
+                <td>Passo 3 (<code>toISOString()</code>)</td>
+              </tr>
+              <tr>
+                <td><code>selectedEvents</code></td>
+                <td>Passo 4 + obrigatórios</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Sequência: <code>POST /esocial-import/batches</code> → guarda <code>id</code> no <code>sessionStorage</code> → <code>POST /esocial-import/batches/:id/process</code>.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-6</span> — Pré-visualização</h3>
+          <p>Consome <code>GET .../preview</code> e <code>GET .../alerts</code> usando o ID do lote salvo localmente.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Elemento</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Resumo numérico</td>
+                <td><code>preview.counts.trabalhadores</code>, <code>remuneracoes</code>, <code>feriasAfastamentos</code></td>
+              </tr>
+              <tr>
+                <td>Aba Trabalhadores</td>
+                <td>Colunas: <code>recordType</code>, <code>externalId</code>, <code>payloadJson</code></td>
+              </tr>
+              <tr>
+                <td>Aba Remunerações</td>
+                <td>Mesmas colunas</td>
+              </tr>
+              <tr>
+                <td>Aba Férias e afastamentos</td>
+                <td>Mesmas colunas</td>
+              </tr>
+              <tr>
+                <td>Aba Alertas</td>
+                <td><code>severity</code>, <code>title</code>, <code>description</code></td>
+              </tr>
+              <tr>
+                <td>Baixar log</td>
+                <td>Download autenticado <code>/esocial-import/batches/:id/export-log</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-7</span> — Confirmação</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo / ação</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Checkbox de ciência</td>
+                <td>Confirmação explícita do cliente.</td>
+                <td>Obrigatório para habilitar o botão de confirmar.</td>
+              </tr>
+              <tr>
+                <td>Corpo da API</td>
+                <td>Registro formal da aceitação.</td>
+                <td><code>POST /esocial-import/batches/:id/confirm</code> com <code>confirmationTextAccepted: true</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-8</span> — Status do lote</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Dado</th>
+                <th>Origem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>status</code></td>
+                <td><code>GET /esocial-import/batches/:id</code></td>
+              </tr>
+              <tr>
+                <td>Link relatório completo</td>
+                <td>Navega para <code>#/wizard/etapa-6/lote/:batchId</code></td>
+              </tr>
+              <tr>
+                <td>Tabela comparativa (UX)</td>
+                <td>“Abordagem comum” × “Folha Digital Sólides” — apenas informativo</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Estados citados na UI: importando, importação concluída, concluída com alertas, erro (com log).</p>
+        </div>
+
+        <div class="flow-box">
+          No MVP a gravação definitiva é <strong>simulada</strong>; o desenho de produção mantém staging, pré-visualização,
+          confirmação e auditoria antes de alterar a base da folha.
+        </div>
+        <p><a href="etapa-5.html">← Etapa 5</a> · <a href="fluxos.html">Fluxos do usuário →</a></p>
+      </main>
+    </div>
+  </body>
+</html>

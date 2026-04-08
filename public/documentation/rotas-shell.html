@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rotas e shell — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html" aria-current="page">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main">
+        <h1>Rotas e shell da aplicação <span class="badge">Apêndice técnico</span></h1>
+        <div class="doc-card">
+          <p style="margin: 0">
+            Página para desenvolvimento. Narrativa de negócio:
+            <a href="diretoria.html">O que vamos entregar</a>.
+          </p>
+        </div>
+        <p>
+          O arquivo <code>App.tsx</code> define o <code>HashRouter</code>. A raiz autenticada
+          redireciona para <code>/dashboard</code>. O layout com menu lateral é o <code>AppShell</code>.
+        </p>
+        <h2>Rotas públicas</h2>
+        <ul>
+          <li><code>#/login</code> — <span class="mono">LoginPage</span></li>
+        </ul>
+        <h2>Rotas protegidas (<code>AppShell</code>)</h2>
+        <ul>
+          <li><code>#/dashboard</code> — painel inicial</li>
+          <li><code>#/settings</code> — configurações da conta / contexto</li>
+          <li><code>#/uploads</code> — gestão de uploads</li>
+          <li><code>#/wizard</code> — hub do wizard (lista de etapas)</li>
+          <li><code>#/wizard/etapa-&lt;1–6&gt;/…</code> — passos do wizard (ver páginas por etapa)</li>
+          <li><code>#/wizard/etapa-6/lote/:batchId</code> — detalhe de lote eSocial</li>
+          <li>Qualquer outra rota autenticada desconhecida → <code>NotFoundPage</code></li>
+        </ul>
+        <h2>Wizard: padrão de URL</h2>
+        <p>Cada etapa usa o layout <code>WizardStageLayout</code> e um <code>stepSlug</code> na URL:</p>
+        <pre><code>#/wizard/etapa-2/passo-3
+#/wizard/etapa-2/resumo</code></pre>
+        <p>
+          O índice de cada etapa (<code>#/wizard/etapa-N</code>) redireciona para <code>passo-1</code>.
+          A etapa 6 tem rota extra <code>lote/:batchId</code> antes do fallback <code>:stepSlug</code>.
+        </p>
+        <h2>Componentes de rota (wizard)</h2>
+        <ul>
+          <li><code>StepOutlet</code> — lê <code>etapa</code> e <code>stepSlug</code> dos params e renderiza <code>StepContent</code>.</li>
+          <li><code>StepContent</code> — escolhe <code>stage1</code> … <code>stage6</code> conforme o número da etapa.</li>
+        </ul>
+        <p class="muted">
+          O mapeamento de slug para progresso no backend está em <code>slugToBackendStepNumber</code> (<code>utils/wizardSteps.ts</code>) usando <code>STAGE_META</code>.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 5 — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html" aria-current="page">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main">
+        <h1>Etapa 5 — Rubricas e eventos</h1>
+        <p class="muted">Mapeamento para importações e folha · ETA: 15–25 min</p>
+        <p>
+          <strong>URL base:</strong> <code>#/wizard/etapa-5/</code> · <strong>Código:</strong>
+          <code>frontend/src/pages/wizard/stage5.tsx</code>
+        </p>
+        <p>
+          Objetivo: cadastrar códigos de proventos/descontos/informativos, marcar incidências trabalhistas e eSocial, e
+          opcionalmente definir centro de custo e departamento padrão — alinhando com a pré-visualização de lotes eSocial
+          na etapa 6.
+        </p>
+
+        <h2>Índice de passos</h2>
+        <ul class="doc-steps">
+          <li><span class="mono slug">passo-1</span> Lista e cadastro manual</li>
+          <li><span class="mono slug">passo-2</span> Incidências e padrões CC/depto</li>
+          <li><span class="mono slug">passo-3</span> Planilha + importação CSV em textarea</li>
+          <li><span class="mono slug">resumo</span> Checklist e envio</li>
+        </ul>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-1</span> — Lista e cadastro</h3>
+          <p>Tabela com todas as rubricas; modal para criar nova.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>code</code></td>
+                <td>Sim</td>
+                <td>Código curto único (holerite, integrações).</td>
+                <td><code>POST /payroll-rubrics</code>; trim no envio.</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>Sim</td>
+                <td>Descrição legível do evento.</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>rubricType</code></td>
+                <td>Sim</td>
+                <td>Natureza do lançamento.</td>
+                <td><code>EARNING</code> (Provento), <code>DEDUCTION</code> (Desconto), <code>INFORMATIVE</code> (Informativo).</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Colunas da tabela: Código, Nome, Tipo.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-2</span> — Incidências e regras</h3>
+          <p>Por rubrica, botão “Incidências / CC” abre modal de edição parcial (não altera código/nome/tipo aqui).</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>incidenceINSS</code></td>
+                <td>Não</td>
+                <td>Incide contribuição previdenciária.</td>
+                <td>Checkbox → boolean no <code>PUT</code>.</td>
+              </tr>
+              <tr>
+                <td><code>incidenceFGTS</code></td>
+                <td>Não</td>
+                <td>Base de FGTS.</td>
+                <td>Checkbox.</td>
+              </tr>
+              <tr>
+                <td><code>incidenceIRRF</code></td>
+                <td>Não</td>
+                <td>Impacta IRRF.</td>
+                <td>Checkbox.</td>
+              </tr>
+              <tr>
+                <td><code>incidenceESocial</code></td>
+                <td>Não</td>
+                <td>Envio/monitoração eSocial.</td>
+                <td>Checkbox.</td>
+              </tr>
+              <tr>
+                <td><code>defaultCostCenterId</code></td>
+                <td>Não</td>
+                <td>CC sugerido quando o lançamento não trouxer centro.</td>
+                <td>Select pesquisável das CC da etapa 2; pode limpar.</td>
+              </tr>
+              <tr>
+                <td><code>defaultDepartmentId</code></td>
+                <td>Não</td>
+                <td>Departamento sugerido.</td>
+                <td>Select pesquisável dos departamentos da etapa 2.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note"><code>PUT /payroll-rubrics/:id</code> reenvia também <code>code</code>, <code>name</code> e <code>rubricType</code> da linha em edição.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-3</span> — Importação planilha</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Elemento</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Upload de arquivo</td>
+                <td>Arquivar planilha para auditoria.</td>
+                <td>Upload categoria <code>RUBRICS_SPREADSHEET</code> (não parseia automaticamente o arquivo no front).</td>
+              </tr>
+              <tr>
+                <td>Textarea CSV</td>
+                <td>Criar várias rubricas de uma vez.</td>
+                <td>Uma linha por rubrica: <code>codigo;nome;tipo</code>. O terceiro campo é enviado em maiúsculas ao backend; use exatamente <code>EARNING</code>, <code>DEDUCTION</code> ou <code>INFORMATIVE</code> (conforme placeholder da tela — “INFORMATIVO” sozinho não é mapeado automaticamente).</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Botão “Importar linhas CSV” → <code>POST /payroll-rubrics/import</code> com array <code>rows</code>; resposta informa criadas e códigos ignorados (duplicados).</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">resumo</span></h3>
+          <ul>
+            <li>Rubricas cadastradas ou importadas (contagem)</li>
+            <li>Lembrete para revisar incidências e CC/depto (passos 1–2)</li>
+          </ul>
+          <p class="doc-note"><strong>Enviar etapa 5</strong> → <code>POST /wizard/stages/5/submit</code>. Há atalho para etapa 6.</p>
+        </div>
+
+        <div class="flow-box">
+          Rubricas mapeadas alimentam alertas na etapa 6 (ex.: eventos não mapeados na pré-visualização do lote eSocial).
+        </div>
+        <p><a href="etapa-4.html">← Etapa 4</a> · <a href="etapa-6.html">Etapa 6 →</a></p>
+      </main>
+    </div>
+  </body>
+</html>

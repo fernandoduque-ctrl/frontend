@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 4 — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html" aria-current="page">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main">
+        <h1>Etapa 4 — Parametrização de benefícios</h1>
+        <p class="muted">Tipos, regras, valores e fornecedores · ETA: 20–30 min</p>
+        <p>
+          <strong>URL base:</strong> <code>#/wizard/etapa-4/</code> · <strong>Código:</strong>
+          <code>frontend/src/pages/wizard/stage4.tsx</code>
+        </p>
+        <p>
+          Objetivo: criar a “receita” de cada benefício (tipo, nome interno, rateio, valores, fornecedor, VT) sem
+          vincular colaboradores — o vínculo por funcionário vem após o eSocial. Depende das etapas 1–3 validadas no fluxo.
+        </p>
+
+        <h2>Índice de passos</h2>
+        <ul class="doc-steps">
+          <li><span class="mono slug">passo-1</span> Entrada</li>
+          <li><span class="mono slug">passo-2</span> Tipos (matriz de status)</li>
+          <li><span class="mono slug">passo-3</span> Cadastro do benefício</li>
+          <li><span class="mono slug">passo-4</span> Regras de cálculo</li>
+          <li><span class="mono slug">passo-5</span> Valores</li>
+          <li><span class="mono slug">passo-6</span> Fornecedor e layout</li>
+          <li><span class="mono slug">passo-7</span> VT (desconto legal)</li>
+          <li><span class="mono slug">passo-8</span> Confirmação de entendimento</li>
+          <li><span class="mono slug">resumo</span> Checklist e envio</li>
+        </ul>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-1</span> — Entrada</h3>
+          <p>Texto orientativo e alertas de dependência. Sem campos persistidos.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-2</span> — Tipos de benefícios</h3>
+          <p>Tabela e cards por tipo fixo do sistema. Colunas: Benefício, Status (Configurado / Não configurado).</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Valor <code>type</code> (API)</th>
+                <th>Rótulo na UI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>MEAL_VOUCHER</code></td>
+                <td>Vale refeição</td>
+              </tr>
+              <tr>
+                <td><code>FOOD_VOUCHER</code></td>
+                <td>Vale alimentação</td>
+              </tr>
+              <tr>
+                <td><code>TRANSPORT_VOUCHER</code></td>
+                <td>Vale transporte</td>
+              </tr>
+              <tr>
+                <td><code>HEALTH_PLAN</code></td>
+                <td>Plano de saúde</td>
+              </tr>
+              <tr>
+                <td><code>LIFE_INSURANCE</code></td>
+                <td>Seguro de vida</td>
+              </tr>
+              <tr>
+                <td><code>OTHER</code></td>
+                <td>Outro</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-3</span> — Cadastro do tipo (novo benefício)</h3>
+          <p>Cria registro com regra inicial 100% empresa e sem dependentes; valores iniciais editáveis nos passos seguintes.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>type</code></td>
+                <td>Sim</td>
+                <td>Categoria do benefício.</td>
+                <td>Mesmos valores do passo 2; se <code>OTHER</code>, alerta para usar nome interno descritivo.</td>
+              </tr>
+              <tr>
+                <td><code>internalName</code></td>
+                <td>Sim</td>
+                <td>Nome exibido na folha e relatórios.</td>
+                <td>Ex.: “Vale refeição — padrão mensal”.</td>
+              </tr>
+              <tr>
+                <td><code>valueType</code></td>
+                <td>Sim</td>
+                <td>Como o valor se aplica.</td>
+                <td><code>DAILY</code> (diário) ou <code>MONTHLY_FIXED</code> (mensal fixo).</td>
+              </tr>
+              <tr>
+                <td><code>defaultValue</code></td>
+                <td>Não</td>
+                <td>Valor padrão em R$.</td>
+                <td>Número; enviado como 0 se vazio no create inicial.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Payload inicial inclui <code>paymentRuleType: COMPANY_100</code>, <code>understoodAck: true</code>, <code>hasDependents: false</code> (ajustáveis no passo 4).</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-4</span> — Regras de cálculo</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>benefitId</code></td>
+                <td>Sim</td>
+                <td>Qual benefício será atualizado.</td>
+                <td>Select pesquisável; ao mudar, preenche demais campos com valores atuais.</td>
+              </tr>
+              <tr>
+                <td><code>paymentRuleType</code></td>
+                <td>Sim</td>
+                <td>Quem arca com o titular.</td>
+                <td><code>COMPANY_100</code>, <code>EMPLOYEE_100</code> ou <code>SPLIT_PERCENT</code>.</td>
+              </tr>
+              <tr>
+                <td><code>companyPercentage</code></td>
+                <td>Se SPLIT</td>
+                <td>% empresa (titular).</td>
+                <td>0–100; exibido só em rateio.</td>
+              </tr>
+              <tr>
+                <td><code>employeePercentage</code></td>
+                <td>Se SPLIT</td>
+                <td>% colaborador (titular).</td>
+                <td>0–100.</td>
+              </tr>
+              <tr>
+                <td><code>hasDependents</code></td>
+                <td>Não</td>
+                <td>Há cobertura/rateio para dependentes?</td>
+                <td>Checkbox; se marcado, exige % empresa e % colaborador para dependentes.</td>
+              </tr>
+              <tr>
+                <td><code>dependentCompanyPercentage</code></td>
+                <td>Se dependentes</td>
+                <td>% empresa sobre dependentes.</td>
+                <td>0–100.</td>
+              </tr>
+              <tr>
+                <td><code>dependentEmployeePercentage</code></td>
+                <td>Se dependentes</td>
+                <td>% colaborador sobre dependentes.</td>
+                <td>0–100.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Persistência: <code>PUT /benefits/:id</code> com merge dos campos acima.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-5</span> — Valores</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>benefitId</code></td>
+                <td>Sim</td>
+                <td>Benefício alvo.</td>
+                <td>Select sincroniza <code>valueType</code> e <code>defaultValue</code>.</td>
+              </tr>
+              <tr>
+                <td><code>valueType</code></td>
+                <td>Sim</td>
+                <td>Diário ou mensal fixo.</td>
+                <td><code>DAILY</code> / <code>MONTHLY_FIXED</code>.</td>
+              </tr>
+              <tr>
+                <td><code>defaultValue</code></td>
+                <td>Sim</td>
+                <td>Valor padrão R$.</td>
+                <td><code>InputNumber</code> ≥ 0, passo 0,01.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-6</span> — Fornecedor</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>benefitId</code></td>
+                <td>Sim</td>
+                <td>Benefício do fornecedor.</td>
+                <td><code>POST /benefit-suppliers</code></td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>Sim</td>
+                <td>Razão social ou nome fantasia do operador.</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>taxId</code></td>
+                <td>Não</td>
+                <td>CNPJ.</td>
+                <td>Máscara; só dígitos no envio; validado se informado.</td>
+              </tr>
+              <tr>
+                <td><code>isPrimary</code></td>
+                <td>Não</td>
+                <td>Marca fornecedor principal do benefício.</td>
+                <td>Checkbox; padrão falso.</td>
+              </tr>
+              <tr>
+                <td>Seletor de fornecedor (layout)</td>
+                <td>Não</td>
+                <td>Escolher a quem anexar o arquivo de layout.</td>
+                <td>Deve selecionar um fornecedor já salvo antes do upload.</td>
+              </tr>
+              <tr>
+                <td>Arquivo de layout</td>
+                <td>Não</td>
+                <td>CSV/XLS/PDF do convênio (Alelo, Caju, etc.).</td>
+                <td><code>POST /benefit-suppliers/:id/layout-file</code> multipart.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Tabela de fornecedores: Benefício (nome interno), Nome, CNPJ, Principal.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-7</span> — Regras específicas (VT)</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>benefitId</code></td>
+                <td>Sim</td>
+                <td>Qual VT (tipo <code>TRANSPORT_VOUCHER</code>).</td>
+                <td>Lista filtrada; se vazia, cadastrar VT no passo 3.</td>
+              </tr>
+              <tr>
+                <td><code>transportDiscountPercent</code></td>
+                <td>Sim</td>
+                <td>Percentual de desconto em folha (teto legal na UI).</td>
+                <td>Máximo <strong>6%</strong> (referência CLT); passo 0,5; rejeita &gt; 6.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-8</span> — Confirmação</h3>
+          <p>Reforça que não há vínculo com colaboradores nesta etapa. O submit cria um benefício exemplo se marcado.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ok</code></td>
+                <td>Sim</td>
+                <td>Confirmar leitura do aviso.</td>
+                <td>Checkbox “Entendi”; validação impede envio sem marcar.</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>Não</td>
+                <td>Nome interno opcional do benefício exemplo.</td>
+                <td>Default no servidor: “Benefício exemplo” se vazio.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Ao enviar: <code>POST /benefits</code> com tipo VR fixo no código de exemplo, <code>understoodAck</code> vindo do checkbox.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">resumo</span></h3>
+          <ul>
+            <li>Tipos cadastrados (contagem benefícios &gt; 0)</li>
+            <li>Regras definidas</li>
+            <li>Valores configurados</li>
+            <li>Fornecedores vinculados</li>
+            <li>VT com passo 7 (se existir benefício transporte)</li>
+          </ul>
+          <p class="doc-note"><strong>Enviar etapa 4</strong> → <code>POST /wizard/stages/4/submit</code>.</p>
+        </div>
+
+        <p><a href="etapa-3.html">← Etapa 3</a> · <a href="etapa-5.html">Etapa 5 →</a></p>
+      </main>
+    </div>
+  </body>
+</html>

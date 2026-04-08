@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 2 — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Diretoria e negócio</span>
+          <a href="index.html">Início</a>
+          <a href="diretoria.html">O que vamos entregar</a>
+          <a href="wizard-intro.html">Wizard — visão geral</a>
+          <a href="fluxos.html">Jornada do cliente</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html" aria-current="page">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+        </nav>
+      </aside>
+      <main class="doc-main">
+        <h1>Etapa 2 — Estrutura operacional da folha</h1>
+        <p class="muted">Horários, centros de custo, bancos e departamentos · ETA: 15–20 min</p>
+        <p>
+          <strong>URL base:</strong> <code>#/wizard/etapa-2/</code> · <strong>Código:</strong>
+          <code>frontend/src/pages/wizard/stage2.tsx</code>
+        </p>
+        <p>
+          Objetivo: cadastrar as estruturas que serão usadas em vínculos, rateios e pagamentos — com opção de importação
+          CSV em horários e centros de custo. Depende da etapa 1 aprovada.
+        </p>
+
+        <h2>Índice de passos</h2>
+        <ul class="doc-steps">
+          <li><span class="mono slug">passo-1</span> Entrada (status, contadores, progresso)</li>
+          <li><span class="mono slug">passo-2</span> Horários de trabalho</li>
+          <li><span class="mono slug">passo-3</span> Centros de custo</li>
+          <li><span class="mono slug">passo-4</span> Bancos para pagamento</li>
+          <li><span class="mono slug">passo-5</span> Departamentos</li>
+          <li><span class="mono slug">resumo</span> Checklist e envio</li>
+        </ul>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-1</span> — Entrada da etapa</h3>
+          <p>Tela informativa: não há formulário de persistência próprio; mostra dependências e quantidades já cadastradas.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Elemento</th>
+                <th>Fonte</th>
+                <th>Para que serve</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cards Empresa / Estrutura / Trabalhadores / Validação</td>
+                <td><code>/dashboard/summary</code></td>
+                <td>Contexto de onboarding: status etapa 1, etapa 2, bloqueio de trabalhadores até eSocial, visão eSocial.</td>
+              </tr>
+              <tr>
+                <td>Contadores (4 cards numéricos)</td>
+                <td>Listagens <code>/work-schedules</code>, <code>/cost-centers</code>, <code>/employee-payment-banks</code>, <code>/departments</code></td>
+                <td>Quantos registros já existem antes de avançar aos passos 2–5.</td>
+              </tr>
+              <tr>
+                <td>Progresso dos passos (backend)</td>
+                <td><code>/wizard/stages/2</code></td>
+                <td>Lista <code>stepNumber</code>, título e <code>status</code> de cada passo técnico.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-2</span> — Relação de horários</h3>
+          <p>Modo manual (modal) ou importação CSV. Tabela lista horários existentes com exclusão por linha.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Modo de entrada</td>
+                <td>—</td>
+                <td>Escolher cadastro manual ou CSV.</td>
+                <td>Radio <code>manual</code> / <code>import</code>. CSV: textarea + botão “Importar horários” → <code>POST /work-schedules/import-csv</code>.</td>
+              </tr>
+              <tr>
+                <td>CSV (textarea)</td>
+                <td>Se import</td>
+                <td>Carga em lote.</td>
+                <td>Formato: <code>nome;journeyType;entrada;saida;intervaloMin;dias</code> — dias como <code>1,2,3,4,5</code>; tipo <code>FIXED</code> ou <code>SHIFT</code>.</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>Sim (manual)</td>
+                <td>Nome do horário (ex.: Administrativo).</td>
+                <td><code>POST /work-schedules</code></td>
+              </tr>
+              <tr>
+                <td><code>journeyType</code></td>
+                <td>Sim</td>
+                <td>Fixa ou escala.</td>
+                <td><code>FIXED</code> = mesma escala recorrente; <code>SHIFT</code> = revezamento de turnos.</td>
+              </tr>
+              <tr>
+                <td><code>startTime</code> / <code>endTime</code></td>
+                <td>Não*</td>
+                <td>Entrada e saída (HH:mm 24h).</td>
+                <td>*Validações legais aparecem como alertas quando preenchidos com intervalo.</td>
+              </tr>
+              <tr>
+                <td><code>breakMinutes</code></td>
+                <td>Não</td>
+                <td>Intervalo intrajornada em minutos.</td>
+                <td>Padrão inicial 60 no modal; mínimo 0.</td>
+              </tr>
+              <tr>
+                <td><code>weekdays</code></td>
+                <td>Não</td>
+                <td>Dias da semana da jornada.</td>
+                <td>Checkbox group: 0=Dom … 6=Sáb. Padrão Seg–Sex.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Colunas da tabela: Nome, Jornada, Entrada, Saída, Intervalo (min), Dias, Excluir.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-3</span> — Centros de custo</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Modo manual / CSV</td>
+                <td>—</td>
+                <td>Fluxo de cadastro.</td>
+                <td>CSV: <code>codigo;nome;cnpjFilialOpcional</code> (somente dígitos no CNPJ da filial) → <code>POST /cost-centers/import-csv</code>.</td>
+              </tr>
+              <tr>
+                <td><code>code</code></td>
+                <td>Sim</td>
+                <td>Código interno (integração, relatórios).</td>
+                <td><code>POST /cost-centers</code> com <code>active: true</code>.</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>Sim</td>
+                <td>Nome exibido na operação.</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>branchId</code></td>
+                <td>Não</td>
+                <td>Vincular CC a uma filial.</td>
+                <td>Select das filiais da etapa 1; vazio = matriz.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Tabela: Código, Nome, Filial (nome ou “Matriz”).</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-4</span> — Bancos e agências</h3>
+          <p>Lista FEBRABAN carregada de <code>/banks</code>. Valida agência com regras BR razoáveis.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>bankReferenceId</code></td>
+                <td>Sim</td>
+                <td>Banco para pagamento de salários.</td>
+                <td>Select pesquisável: código + nome.</td>
+              </tr>
+              <tr>
+                <td><code>agency</code></td>
+                <td>Sim</td>
+                <td>Número da agência (1 a 5 dígitos).</td>
+                <td>Validação <code>isReasonableBankAgency</code>.</td>
+              </tr>
+              <tr>
+                <td><code>agencyDigit</code></td>
+                <td>Não</td>
+                <td>DV da agência quando existir.</td>
+                <td>Até 2 caracteres numéricos.</td>
+              </tr>
+              <tr>
+                <td><code>accountType</code></td>
+                <td>Sim</td>
+                <td>Tipo de conta para crédito.</td>
+                <td><code>CHECKING</code> (corrente), <code>SAVINGS</code> (poupança), <code>PAYMENT</code> (conta pagamento). Padrão: corrente.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Tabela: Banco (código — nome), Agência, Tipo conta.</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">passo-5</span> — Departamentos</h3>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Obrig.</th>
+                <th>Para que serve</th>
+                <th>Como funciona</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>code</code></td>
+                <td>Sim</td>
+                <td>Código interno (RH, OP, etc.).</td>
+                <td><code>POST /departments</code> com <code>active: true</code>.</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>Sim</td>
+                <td>Nome em holerites e relatórios.</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>costCenterId</code></td>
+                <td>Não</td>
+                <td>Departamento ligado a um CC.</td>
+                <td>Select dos centros de custo; pode limpar.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Tabela: Código, Nome, CC (código ou —).</p>
+        </div>
+
+        <div class="pass-block">
+          <h3><span class="mono">resumo</span></h3>
+          <p>Tabela comparativa “Antes × Wizard”, checklist com ✔ se houver pelo menos um registro em cada lista, contagens e envio.</p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Item do checklist</th>
+                <th>Regra na UI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Horários cadastrados</td>
+                <td>✔ se <code>work-schedules</code> length &gt; 0</td>
+              </tr>
+              <tr>
+                <td>Centros de custo</td>
+                <td>✔ se <code>cost-centers</code> length &gt; 0</td>
+              </tr>
+              <tr>
+                <td>Bancos para pagamento</td>
+                <td>✔ se <code>employee-payment-banks</code> length &gt; 0</td>
+              </tr>
+              <tr>
+                <td>Departamentos</td>
+                <td>✔ se <code>departments</code> length &gt; 0</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="doc-note">Botão: <strong>Enviar etapa 2 para validação</strong> → <code>POST /wizard/stages/2/submit</code>.</p>
+        </div>
+
+        <div class="flow-box">
+          Após aprovação: estruturas ativas para cadastro de trabalhadores; liberação progressiva conforme política da conta
+          e etapas seguintes (ex.: importação eSocial).
+        </div>
+        <p><a href="etapa-1.html">← Etapa 1</a> · <a href="etapa-3.html">Etapa 3 →</a></p>
+      </main>
+    </div>
+  </body>
+</html>
