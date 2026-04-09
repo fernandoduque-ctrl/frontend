@@ -49,15 +49,66 @@
           base histórica, benefícios, rubricas e importação eSocial), com textos e checklists
           alinhados ao processo consultivo.
         </p>
-        <h2>Stack técnica</h2>
+        <h2>Stack técnica (visão completa)</h2>
+        <p class="muted" style="margin-top: 0">
+          Versões alinhadas aos <code>package.json</code> dos repositórios <code>frontend</code> e <code>backend</code>.
+        </p>
+
+        <h3>Frontend (<code>folha-solid-wizard-frontend</code>)</h3>
         <ul>
-          <li><strong>React 18</strong> + <strong>TypeScript</strong></li>
-          <li><strong>Vite</strong> como bundler e dev server</li>
-          <li><strong>React Router</strong> em modo <code>HashRouter</code> (URLs com <code>#</code>)</li>
-          <li><strong>Ant Design (antd)</strong> para UI</li>
-          <li><strong>React Query</strong> (@tanstack/react-query) para dados remotos</li>
-          <li><strong>React Hook Form</strong> + <strong>Zod</strong> onde há formulários validados</li>
-          <li><strong>Axios</strong> via serviço de API</li>
+          <li><strong>React 18</strong> + <strong>TypeScript</strong> (~5.6)</li>
+          <li><strong>Vite 6</strong> como bundler e dev server (<code>@vitejs/plugin-react</code>)</li>
+          <li><strong>React Router DOM 6</strong> em modo <code>HashRouter</code> (URLs com <code>#</code>)</li>
+          <li><strong>Ant Design 5</strong> (<code>antd</code>) + <strong>@ant-design/icons</strong></li>
+          <li><strong>TanStack React Query 5</strong> para cache e chamadas à API</li>
+          <li><strong>React Hook Form 7</strong> + <strong>Zod 3</strong> + <strong>@hookform/resolvers</strong> em formulários validados</li>
+          <li><strong>Axios</strong> centralizado em <code>src/services/api.ts</code> (base URL via <code>VITE_API_URL</code>)</li>
+          <li><strong>dayjs</strong> (datas, alinhado ao ecossistema Ant Design)</li>
+          <li><strong>Mermaid 11</strong> — diagrama ER na página pública <code>#/documentacao/diagrama-banco</code> (render + export SVG)</li>
+          <li><strong>html2canvas</strong> + <strong>jspdf</strong> — geração de PDF onde usado no app</li>
+          <li>
+            <strong>Script</strong> <code>npm run lint</code> no <code>package.json</code> (ESLint em
+            <code>src/**/*.{ts,tsx}</code>); o pacote ESLint pode precisar ser adicionado às devDependencies para rodar em máquina limpa.
+          </li>
+        </ul>
+
+        <h3>Backend (<code>folha-solid-wizard-backend</code>)</h3>
+        <ul>
+          <li><strong>Node.js</strong> ≥ 20</li>
+          <li><strong>NestJS 10</strong> (HTTP com <code>@nestjs/platform-express</code>)</li>
+          <li><strong>TypeScript</strong> (~5.7)</li>
+          <li><strong>Prisma 5</strong> — ORM, migrations e <code>prisma/seed.ts</code></li>
+          <li><strong>@nestjs/config</strong> — variáveis de ambiente (<code>.env</code>)</li>
+          <li><strong>Autenticação JWT</strong> — <code>@nestjs/jwt</code>, <code>@nestjs/passport</code>, <code>passport-jwt</code>, senhas com <strong>bcrypt</strong></li>
+          <li><strong>Validação</strong> — <code>class-validator</code> + <code>class-transformer</code> + <code>ValidationPipe</code> global</li>
+          <li><strong>OpenAPI / Swagger</strong> — <code>@nestjs/swagger</code>; UI em <code>/api/docs</code></li>
+          <li><strong>Uploads</strong> — <code>multer</code>; arquivos servidos como estáticos sob <code>/files/</code> (pasta <code>STORAGE_PATH</code> ou <code>storage/</code> no projeto)</li>
+          <li><strong>Resposta da API</strong> — envelope padronizado via interceptor (<code>TransformInterceptor</code>) e filtro global de exceções</li>
+          <li><strong>ESLint 9</strong> + <strong>TypeScript ESLint 8</strong> — script <code>npm run lint</code></li>
+        </ul>
+
+        <h3>Banco de dados</h3>
+        <ul>
+          <li>
+            <strong>SQLite</strong> no <code>schema.prisma</code> atual (<code>DATABASE_URL</code>) — adequado a dev/MVP local.
+          </li>
+          <li>
+            O schema é <strong>portátil</strong>: comentário no Prisma indica troca de <code>provider</code> e URL para
+            <strong>PostgreSQL</strong>, MySQL ou SQL Server em outros ambientes.
+          </li>
+          <li>Enums de domínio no SQLite ficam como <code>String</code>; constantes espelhadas em <code>src/common/prisma-enums.ts</code> no backend.</li>
+        </ul>
+
+        <h3>Integração front ↔ back</h3>
+        <ul>
+          <li>REST JSON; cabeçalhos <code>Authorization: Bearer …</code> e <code>X-Company-Id</code> quando aplicável (multi-empresa).</li>
+          <li>Contratos descritos no Swagger; página estática <a href="swagger.html">swagger.html</a> embute a UI OpenAPI.</li>
+        </ul>
+
+        <h3>Documentação estática (este site)</h3>
+        <ul>
+          <li>HTML + CSS em <code>public/documentation/</code>; sem framework no guia.</li>
+          <li>Diagrama ER e tabelas do schema via API do backend na rota pública do app React.</li>
         </ul>
         <h2>Pastas relevantes (<code>src/</code>)</h2>
         <ul>
