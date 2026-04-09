@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cronograma técnico — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="doc-body--story">
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Negócio</span>
+          <a href="index.html">Início</a>
+          <a href="o-que-vamos-entregar.html">O que vamos entregar</a>
+          <a href="cronograma.html" aria-current="page">Cronograma</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+          <a href="/#/documentacao/diagrama-banco">Diagrama do banco</a>
+        </nav>
+      </aside>
+      <main class="doc-main doc-main--wide">
+        <header class="doc-hero">
+          <p class="doc-hero__eyebrow">Engenharia de software</p>
+          <h1 class="doc-hero__title">Cronograma técnico de implementação</h1>
+          <p class="doc-hero__lede">
+            Planejamento técnico do produto: <strong>NestJS</strong>, <strong>Prisma</strong>, APIs, telas
+            <strong>React</strong>, pipeline, testes e hardening. Itens <strong>não iniciado</strong> nos sprints são entregas
+            com data alvo — ajustáveis conforme time e prioridade do backlog.
+          </p>
+          <div class="doc-pill-row">
+            <span class="doc-pill">Nest 10 + Prisma 5</span>
+            <span class="doc-pill">React 18 + Vite 6</span>
+            <span class="doc-pill">JWT + Swagger</span>
+          </div>
+        </header>
+
+        <h2>Stack de referência (baseline técnica)</h2>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table">
+            <thead>
+              <tr>
+                <th scope="col">Camada</th>
+                <th scope="col">Tecnologias / artefatos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Backend</td>
+                <td>
+                  Node ≥20, <strong>NestJS 10</strong>, <strong>Prisma 5</strong>, PostgreSQL (via
+                  <code>DATABASE_URL</code>), Passport JWT, class-validator / class-transformer, Swagger
+                  (<code>/api/docs</code>), Multer para uploads
+                </td>
+              </tr>
+              <tr>
+                <td>Frontend</td>
+                <td>
+                  <strong>React 18</strong>, TypeScript, <strong>Vite 6</strong>, <strong>HashRouter</strong>, Ant Design
+                  5, TanStack Query 5, React Hook Form + Zod, Axios (<code>src/services/api</code>)
+                </td>
+              </tr>
+              <tr>
+                <td>Qualidade</td>
+                <td>
+                  ESLint (FE <code>--max-warnings 0</code>, BE fix), builds <code>nest build</code> /
+                  <code>vite build</code>; testes automatizados a introduzir/ampliar no cronograma formal (Jest/supertest
+                  no BE, opcional Playwright no FE)
+                </td>
+              </tr>
+              <tr>
+                <td>Deploy</td>
+                <td>
+                  Scripts <code>build:deploy</code> (Prisma generate + migrate + Nest build), variáveis em ambiente
+                  (Render ou equivalente); frontend estático + API separada
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Trabalho exploratório já realizado (fora do baseline de release)</h2>
+        <p class="doc-note">
+          Trabalho exploratório que reduz risco técnico. Não substitui checklist de hardening, cobertura de testes nem
+          revisão de segurança para produção.
+        </p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Área</th>
+                <th scope="col">O que foi exercitado (técnico)</th>
+                <th scope="col">Até</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Backend</td>
+                <td>
+                  Estrutura Nest (módulos, controllers, services), autenticação JWT, integração Prisma, endpoints do
+                  wizard alinhados às etapas, Swagger exposto, seed <code>prisma/seed.ts</code>, rotas de documentação
+                  (<code>/documentation/schema-*</code>) para diagrama ER
+                </td>
+                <td>09/04/2026</td>
+                <td><span class="schedule-tag schedule-tag--study">Exploratório</span></td>
+              </tr>
+              <tr>
+                <td>Banco</td>
+                <td>
+                  Modelagem Prisma (empresa, estrutura, histórico, benefícios, rubricas, eSocial, arquivos), migrações
+                  em ambiente de dev, diagrama gerado a partir do schema
+                </td>
+                <td>09/04/2026</td>
+                <td><span class="schedule-tag schedule-tag--study">Exploratório</span></td>
+              </tr>
+              <tr>
+                <td>Frontend</td>
+                <td>
+                  <code>AppShell</code>, <code>WizardStageLayout</code>, <code>StepOutlet</code> / <code>StepContent</code>,
+                  estágios <code>stage1.tsx</code>…<code>stage6.tsx</code>, React Query para dados, formulários com RHF +
+                  Zod onde aplicável, rota pública <code>#/documentacao/diagrama-banco</code>
+                </td>
+                <td>09/04/2026</td>
+                <td><span class="schedule-tag schedule-tag--study">Exploratório</span></td>
+              </tr>
+              <tr>
+                <td>DX / Doc</td>
+                <td>
+                  Páginas estáticas em <code>public/documentation/</code>, referência de rotas e telas; sem pipeline de
+                  release documental versionado
+                </td>
+                <td>09/04/2026</td>
+                <td><span class="schedule-tag schedule-tag--study">Exploratório</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sprint 0 — Fundação de engenharia (baseline)</h2>
+        <p class="doc-note">
+          <strong>Cadência:</strong> cada sprint encerra <strong>14 dias</strong> após o fim do sprint anterior (S0 → 15/05,
+          S1 → 29/05, …, S8 → 04/09/2026). Prazo alvo deste sprint: <strong>15/05/2026</strong>. Itens abaixo:
+          <span class="schedule-tag schedule-tag--todo">Não iniciado</span> como trabalho formal.
+        </p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Área</th>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Critério / artefato</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Repositório</td>
+                <td>Política de branches, tamanho de PR, template de PR (checklist: testes, migração, breaking API)</td>
+                <td>Documentado em <code>CONTRIBUTING.md</code> ou wiki do time</td>
+              </tr>
+              <tr>
+                <td>CI</td>
+                <td>Pipeline em PR: <code>npm run lint</code> + <code>npm run build</code> (FE e BE separados)</td>
+                <td>PR vermelho bloqueia merge em <code>main</code></td>
+              </tr>
+              <tr>
+                <td>Config</td>
+                <td>
+                  <code>.env.example</code> no backend e frontend com todas as chaves necessárias; validação de env no
+                  bootstrap Nest (<code>@nestjs/config</code>)
+                </td>
+                <td>App falha rápido se variável obrigatória ausente</td>
+              </tr>
+              <tr>
+                <td>Prisma</td>
+                <td>Fluxo único: <code>migrate dev</code> local, <code>migrate deploy</code> em CI/CD; proibir <code>db push</code> em prod</td>
+                <td>Script de deploy documentado; zero drift schema/prod</td>
+              </tr>
+              <tr>
+                <td>NestJS</td>
+                <td>
+                  <code>ValidationPipe</code> global (whitelist + transform), filtro de exceção HTTP padronizado, tags
+                  Swagger por domínio (auth, company, wizard, …)
+                </td>
+                <td>Respostas de erro JSON consistentes; OpenAPI atualizado</td>
+              </tr>
+              <tr>
+                <td>Segurança</td>
+                <td>Revisão CORS, rate limit (se aplicável), tamanho máximo upload Multer, sanitização de nomes de arquivo</td>
+                <td>Lista de riscos + issues criadas</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sprint 1 — Autenticação e camada HTTP (hardening)</h2>
+        <p class="doc-note">Prazo alvo (fim do sprint): <strong>29/05/2026</strong>.</p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Camada</th>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Critério</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>BE</td>
+                <td>
+                  Revisar estratégia Passport JWT: expiração, claims, rotação (se necessário); bcrypt cost factor documentado;
+                  testes supertest para <code>POST /auth/login</code> (200 / 401)
+                </td>
+                <td>Cobertura mínima acordada nos fluxos de auth</td>
+              </tr>
+              <tr>
+                <td>BE</td>
+                <td>Inventário de guards: quais controllers são públicos vs <code>JwtAuthGuard</code>; alinhar com rotas FE</td>
+                <td>Tabela no código ou doc técnica</td>
+              </tr>
+              <tr>
+                <td>FE</td>
+                <td>
+                  Interceptor Axios: anexar <code>Authorization</code>, tratar 401 (limpar sessão, redirect
+                  <code>#/login</code>); evitar vazamento de token em logs
+                </td>
+                <td>Fluxo manual + teste E2E opcional</td>
+              </tr>
+              <tr>
+                <td>FE</td>
+                <td><code>ProtectedRoute</code>: estado de carregamento, evitar flash de shell sem usuário</td>
+                <td>UX estável no refresh da página</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sprint 2 — Etapa 1 (Empresa): contrato API + UI</h2>
+        <p class="doc-note">Prazo alvo (fim do sprint): <strong>12/06/2026</strong>. Espelhar <a href="etapa-1.html">etapa-1.html</a>.</p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Camada</th>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Detalhe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>BE</td>
+                <td>DTOs + validação para empresa / filial / documentos</td>
+                <td>class-validator em todos os inputs; erros 400 mapeados</td>
+              </tr>
+              <tr>
+                <td>BE</td>
+                <td>Endpoints de persistência e consulta alinhados ao fluxo consultivo (status, validação)</td>
+                <td>OpenAPI com exemplos; versionamento de rota se breaking</td>
+              </tr>
+              <tr>
+                <td>BE</td>
+                <td>Upload: Multer, storage, associação <code>UploadedFile</code> ↔ entidade</td>
+                <td>Tipos MIME permitidos; limite de tamanho; teste de upload</td>
+              </tr>
+              <tr>
+                <td>FE</td>
+                <td><code>stage1.tsx</code>: formulários, React Query (mutations/queries), invalidação de cache</td>
+                <td>Paridade com campos obrigatórios do DTO</td>
+              </tr>
+              <tr>
+                <td>FE</td>
+                <td>Alinhar <code>slugToBackendStepNumber</code> / <code>STAGE_META</code> com progresso real da API</td>
+                <td>Barra de etapa correta após salvar</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sprint 3 — Etapa 2 (Estrutura operacional)</h2>
+        <p class="doc-note">Prazo alvo (fim do sprint): <strong>26/06/2026</strong>.</p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Camada</th>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Detalhe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>BE + DB</td>
+                <td>CRUD centros de custo, departamentos, contas bancárias, jornadas/horários conforme schema</td>
+                <td>Migrações incrementais; constraints e índices para consultas do wizard</td>
+              </tr>
+              <tr>
+                <td>FE</td>
+                <td><code>stage2.tsx</code> passos, validações BR (<code>brForm.ts</code> onde couber)</td>
+                <td>Reuso de componentes de tabela/form Ant Design</td>
+              </tr>
+              <tr>
+                <td>QA</td>
+                <td>Testes de integração BE para regras de negócio (ex.: unicidade por empresa)</td>
+                <td>Jest + Prisma test DB ou mocks conforme padrão do repo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sprint 4 — Etapa 3 (Base histórica / trabalhadores)</h2>
+        <p class="doc-note">Prazo alvo (fim do sprint): <strong>10/07/2026</strong>.</p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Camada</th>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Detalhe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>BE + DB</td>
+                <td>Modelos de trabalhador, dependente, afastamento, histórico de folha; relacionamentos e migrações</td>
+                <td>Performance em listagens paginadas</td>
+              </tr>
+              <tr>
+                <td>BE</td>
+                <td>Upload e categorização de documentos históricos</td>
+                <td>Metadados e rastreabilidade (quem enviou, quando)</td>
+              </tr>
+              <tr>
+                <td>FE</td>
+                <td><code>stage3.tsx</code> fluxos longos: estados de loading, erro, retry</td>
+                <td>Query keys estáveis por recurso</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sprint 5 — Etapa 4 (Benefícios)</h2>
+        <p class="doc-note">Prazo alvo (fim do sprint): <strong>24/07/2026</strong>.</p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Camada</th>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Detalhe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>BE</td>
+                <td>Parametrização VR/VT/plano saúde etc.: DTOs, regras de percentuais e tetos</td>
+                <td>Validação cruzada com política da empresa (campos configuráveis)</td>
+              </tr>
+              <tr>
+                <td>FE</td>
+                <td><code>stage4.tsx</code> formulários dinâmicos por tipo de benefício</td>
+                <td>Zod schemas por variante</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sprint 6 — Etapa 5 (Rubricas)</h2>
+        <p class="doc-note">Prazo alvo (fim do sprint): <strong>07/08/2026</strong>.</p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Camada</th>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Detalhe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>BE + DB</td>
+                <td>Modelagem PayrollRubric, incidências INSS/IRRF/FGTS, vínculos CC/Department</td>
+                <td>Consistência com diagrama ER documentado</td>
+              </tr>
+              <tr>
+                <td>BE</td>
+                <td>Importação em planilha (se existir): parsing, validação linha a linha, relatório de erro</td>
+                <td>Transação ou batch com rollback parcial definido</td>
+              </tr>
+              <tr>
+                <td>FE</td>
+                <td><code>stage5.tsx</code> revisão com consultor: estados de rascunho vs confirmado</td>
+                <td>UX para grandes volumes (virtualização se necessário)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sprint 7 — Etapa 6 (eSocial: lote, staging, confirmação)</h2>
+        <p class="doc-note">Prazo alvo (fim do sprint): <strong>21/08/2026</strong>. Inclui rota <code>#/wizard/etapa-6/lote/:batchId</code>.</p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Camada</th>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Detalhe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>BE</td>
+                <td>Pipeline de lote: criar batch, processar eventos, status, logs exportáveis</td>
+                <td>Idempotência onde aplicável; auditoria de confirmação</td>
+              </tr>
+              <tr>
+                <td>BE</td>
+                <td>Certificado / período / seleção de eventos (integração real ou simulador documentado)</td>
+                <td>Feature flags se ambiente não tiver gov.br</td>
+              </tr>
+              <tr>
+                <td>FE</td>
+                <td><code>EsocialLotePage</code>, alertas de pré-visualização, confirmação explícita</td>
+                <td>Impedir double-submit; feedback de erros da API</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Sprint 8 — Qualidade, observabilidade e release candidato</h2>
+        <p class="doc-note">Prazo alvo (fim do sprint): <strong>04/09/2026</strong> (release candidato do MVP técnico).</p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table schedule-table--wide">
+            <thead>
+              <tr>
+                <th scope="col">Área</th>
+                <th scope="col">Tarefa</th>
+                <th scope="col">Critério</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Testes</td>
+                <td>Ampliar suite BE (e2e por módulo crítico); smoke test pós-deploy</td>
+                <td>Lista de casos mínimos no DoD de release</td>
+              </tr>
+              <tr>
+                <td>Performance</td>
+                <td>Revisar N+1 Prisma (<code>include</code> vs select), paginação em listas grandes</td>
+                <td>Métricas antes/depois em 3 endpoints críticos</td>
+              </tr>
+              <tr>
+                <td>Observabilidade</td>
+                <td>Logs estruturados (nível, requestId), healthcheck <code>/health</code> usado pelo orchestrator</td>
+                <td>Alerta se health falhar em produção</td>
+              </tr>
+              <tr>
+                <td>Release</td>
+                <td>Tag semver, changelog técnico, migrações aplicadas antes do tráfego</td>
+                <td>Rollback plan documentado (DB + app)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Resumo de sprints e prazos alvo</h2>
+        <p class="doc-note">
+          Todos os prazos são <strong>datas de encerramento</strong> do sprint. Regra: <strong>+14 dias</strong> entre o
+          fim de <em>S<sub>n</sub></em> e o fim de <em>S<sub>n+1</sub></em> (S0 fixo em 15/05/2026).
+        </p>
+        <div class="table-wrap">
+          <table class="doc-table schedule-table">
+            <thead>
+              <tr>
+                <th scope="col">Sprint</th>
+                <th scope="col">Foco</th>
+                <th scope="col">Prazo alvo</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>S0</td>
+                <td>Fundação CI/CD, Prisma, Nest base, segurança mínima</td>
+                <td>15/05/2026</td>
+                <td><span class="schedule-tag schedule-tag--todo">Não iniciado</span></td>
+              </tr>
+              <tr>
+                <td>S1</td>
+                <td>Auth hardening + HTTP FE/BE</td>
+                <td>29/05/2026</td>
+                <td><span class="schedule-tag schedule-tag--todo">Não iniciado</span></td>
+              </tr>
+              <tr>
+                <td>S2</td>
+                <td>Etapa 1 empresa</td>
+                <td>12/06/2026</td>
+                <td><span class="schedule-tag schedule-tag--todo">Não iniciado</span></td>
+              </tr>
+              <tr>
+                <td>S3</td>
+                <td>Etapa 2 estrutura</td>
+                <td>26/06/2026</td>
+                <td><span class="schedule-tag schedule-tag--todo">Não iniciado</span></td>
+              </tr>
+              <tr>
+                <td>S4</td>
+                <td>Etapa 3 base histórica</td>
+                <td>10/07/2026</td>
+                <td><span class="schedule-tag schedule-tag--todo">Não iniciado</span></td>
+              </tr>
+              <tr>
+                <td>S5</td>
+                <td>Etapa 4 benefícios</td>
+                <td>24/07/2026</td>
+                <td><span class="schedule-tag schedule-tag--todo">Não iniciado</span></td>
+              </tr>
+              <tr>
+                <td>S6</td>
+                <td>Etapa 5 rubricas</td>
+                <td>07/08/2026</td>
+                <td><span class="schedule-tag schedule-tag--todo">Não iniciado</span></td>
+              </tr>
+              <tr>
+                <td>S7</td>
+                <td>Etapa 6 eSocial</td>
+                <td>21/08/2026</td>
+                <td><span class="schedule-tag schedule-tag--todo">Não iniciado</span></td>
+              </tr>
+              <tr>
+                <td>S8</td>
+                <td>QA, performance, release RC</td>
+                <td>04/09/2026</td>
+                <td><span class="schedule-tag schedule-tag--todo">Não iniciado</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
