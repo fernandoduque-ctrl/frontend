@@ -25,8 +25,8 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
-# Local scripts (not tracked)
-scripts/
+# PowerShell (local helpers)
+*.ps1
 
 # Test / coverage
 coverage
