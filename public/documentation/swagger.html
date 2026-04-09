@@ -3,12 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="../images/favicon.ico" sizes="any" type="image/x-icon" />
     <title>API (Swagger) — Documentação</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="doc-layout">
       <aside class="doc-sidebar doc-sidebar--soft">
+        <a href="index.html" class="doc-logo-link" aria-label="Folha Digital Sólides — início da documentação">
+          <img src="../images/logo.svg" alt="" width="103" height="24" class="doc-logo" />
+        </a>
         <h1 class="doc-brand">Folha Digital Sólides</h1>
         <span class="tag">Guia — negócio e produto</span>
         <nav class="doc-nav" aria-label="Documentação">
@@ -42,28 +46,18 @@
         </div>
         <p>
           <a
+            class="doc-action-link"
             href="https://backend-clmv.onrender.com/api/docs#/auth/AuthController_login"
             target="_blank"
             rel="noopener noreferrer"
-            ><strong>Abrir Swagger em nova aba</strong></a
+            >Abrir Swagger em nova aba</a
           >
         </p>
         <p><code>https://backend-clmv.onrender.com/api/docs#/auth/AuthController_login</code></p>
-        <div
-          style="
-            margin-top: 16px;
-            height: min(78vh, 900px);
-            min-height: 480px;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 8px;
-            overflow: hidden;
-            background: #fff;
-          "
-        >
+        <div class="doc-embed-frame">
           <iframe
             title="Swagger UI"
             src="https://backend-clmv.onrender.com/api/docs#/auth/AuthController_login"
-            style="width: 100%; height: 100%; border: 0"
           ></iframe>
         </div>
       </main>
