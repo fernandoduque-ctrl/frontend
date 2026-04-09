@@ -27,7 +27,8 @@
           <a href="projeto.html">Stack e pastas</a>
           <a href="rotas-shell.html" aria-current="page">Rotas e shell</a>
           <a href="telas.html">Todas as telas</a>
-          <a href="/#/documentacao/diagrama-banco">Diagrama do banco</a>
+          <a href="diagrama-banco.html">Diagrama do banco</a>
+          <a href="swagger.html">API (Swagger)</a>
         </nav>
       </aside>
       <main class="doc-main">
@@ -47,7 +48,12 @@
           <li><code>#/login</code> — <span class="mono">LoginPage</span></li>
           <li>
             <code>#/documentacao/diagrama-banco</code> — <span class="mono">DatabaseErDiagramPage</span> (diagrama ER
-            Mermaid + documentação tabular do schema; não exige login)
+            Mermaid + documentação tabular do schema; não exige login). Também em
+            <code>/documentation/diagrama-banco.html</code> (HTML estático com iframe para essa rota).
+          </li>
+          <li>
+            <code>/documentation/swagger.html</code> (estático em <span class="mono">public/documentation</span>) —
+            UI OpenAPI do backend em iframe + link em nova aba; fora do <code>HashRouter</code>
           </li>
         </ul>
         <h2>Rotas protegidas (<code>AppShell</code>)</h2>

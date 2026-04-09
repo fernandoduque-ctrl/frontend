@@ -27,7 +27,8 @@
           <a href="projeto.html">Stack e pastas</a>
           <a href="rotas-shell.html">Rotas e shell</a>
           <a href="telas.html">Todas as telas</a>
-          <a href="/#/documentacao/diagrama-banco">Diagrama do banco</a>
+          <a href="diagrama-banco.html">Diagrama do banco</a>
+          <a href="swagger.html">API (Swagger)</a>
         </nav>
       </aside>
       <main class="doc-main doc-main--wide">
@@ -105,13 +106,25 @@
               <span class="doc-map-card__kicker">Banco / ER</span>
               <strong class="doc-map-card__title">Diagrama e tabelas do schema</strong>
               <p class="doc-map-card__desc">
-                Página no próprio app: diagrama entidade-relacionamento (Mermaid) derivado do Prisma, visão das relações
-                entre modelos e documentação tabular de colunas, tipos e chaves. Dá para exportar o diagrama em SVG para
-                wiki ou apresentação.
+                Página HTML nesta pasta com iframe que carrega a rota pública do app (<code>#/documentacao/diagrama-banco</code>):
+                diagrama ER (Mermaid) a partir do Prisma, tabelas de colunas/chaves e exportação SVG.
               </p>
               <div class="doc-map-card__actions">
-                <a href="/#/documentacao/diagrama-banco">Abrir no app (mesmo site)</a>
-                <a href="https://frontend-opnc.onrender.com/#/documentacao/diagrama-banco">Demonstração online</a>
+                <a href="diagrama-banco.html">Abrir página do diagrama</a>
+                <a href="https://frontend-opnc.onrender.com/documentation/diagrama-banco.html">Demonstração online</a>
+              </div>
+            </div>
+            <div class="doc-map-card doc-map-card--static">
+              <span class="doc-map-card__icon" aria-hidden="true">🔌</span>
+              <span class="doc-map-card__kicker">HTTP / OpenAPI</span>
+              <strong class="doc-map-card__title">Swagger da API</strong>
+              <p class="doc-map-card__desc">
+                UI interativa do contrato REST (endpoints, schemas, “Try it out”). Página HTML nesta pasta com iframe e
+                link para nova aba; backend de referência no Render.
+              </p>
+              <div class="doc-map-card__actions">
+                <a href="swagger.html">Abrir página Swagger</a>
+                <a href="https://backend-clmv.onrender.com/api/docs#/auth/AuthController_login">Backend (Swagger direto)</a>
               </div>
             </div>
           </div>
@@ -130,7 +143,8 @@
                 <a href="projeto.html">Stack e pastas</a>
                 <a href="rotas-shell.html">Rotas e shell</a>
                 <a href="telas.html">Todas as telas</a>
-                <a href="/#/documentacao/diagrama-banco">Diagrama do banco</a>
+                <a href="diagrama-banco.html">Diagrama do banco</a>
+                <a href="swagger.html">API (Swagger)</a>
               </div>
             </div>
           </div>

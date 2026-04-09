@@ -114,7 +114,8 @@ export function DatabaseErDiagramPage() {
       </Title>
       <Paragraph type="secondary">
         Gerado a partir do <Text code>schema.prisma</Text> na API. Exporte o SVG para draw.io, navegador ou editor
-        vetorial.
+        vetorial. Contratos HTTP:{' '}
+        <a href="/documentation/swagger.html">documentação da API (Swagger)</a>.
       </Paragraph>
 
       {q.isLoading && (

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Diagrama do banco — Documentação</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="doc-layout">
+      <aside class="doc-sidebar doc-sidebar--soft">
+        <h1 class="doc-brand">Folha Digital Sólides</h1>
+        <span class="tag">Guia — negócio e produto</span>
+        <nav class="doc-nav" aria-label="Documentação">
+          <span class="nav-section">Negócio</span>
+          <a href="index.html">Início</a>
+          <a href="o-que-vamos-entregar.html">O que vamos entregar</a>
+          <a href="cronograma.html">Cronograma</a>
+          <span class="nav-section">Etapas (detalhe)</span>
+          <a href="etapa-1.html">1 — Empresa</a>
+          <a href="etapa-2.html">2 — Estrutura</a>
+          <a href="etapa-3.html">3 — Base histórica</a>
+          <a href="etapa-4.html">4 — Benefícios</a>
+          <a href="etapa-5.html">5 — Rubricas</a>
+          <a href="etapa-6.html">6 — eSocial</a>
+          <span class="nav-section">Apêndice técnico</span>
+          <a href="projeto.html">Stack e pastas</a>
+          <a href="rotas-shell.html">Rotas e shell</a>
+          <a href="telas.html">Todas as telas</a>
+          <a href="diagrama-banco.html" aria-current="page">Diagrama do banco</a>
+          <a href="swagger.html">API (Swagger)</a>
+        </nav>
+      </aside>
+      <main class="doc-main doc-main--wide">
+        <h1>Diagrama do banco <span class="badge">ER / Prisma</span></h1>
+        <div class="doc-card">
+          <p style="margin: 0">
+            A área abaixo carrega a página do app React (<code>DatabaseErDiagramPage</code>): diagrama entidade-relacionamento
+            (Mermaid) a partir do <code>schema.prisma</code>, documentação tabular das tabelas e exportação SVG. É preciso
+            estar no <strong>mesmo host</strong> que o frontend (ex.: <code>npm run dev</code> em
+            <code>http://localhost:5173</code>) para o iframe apontar corretamente; a API deve estar acessível para os
+            dados carregarem.
+          </p>
+        </div>
+        <p>
+          <a id="diagram-open-tab" href="#" target="_blank" rel="noopener noreferrer"
+            ><strong>Abrir diagrama em nova aba</strong></a
+          >
+        </p>
+        <p><code id="diagram-app-url"></code></p>
+        <div
+          style="
+            margin-top: 16px;
+            height: min(78vh, 900px);
+            min-height: 480px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+          "
+        >
+          <iframe
+            id="diagram-app-frame"
+            title="Diagrama do banco — app"
+            style="width: 100%; height: 100%; border: 0"
+          ></iframe>
+        </div>
+      </main>
+    </div>
+    <script>
+      (function () {
+        var hashPath = '/#/documentacao/diagrama-banco';
+        var appUrl = window.location.origin + hashPath;
+        var frame = document.getElementById('diagram-app-frame');
+        var openLink = document.getElementById('diagram-open-tab');
+        var codeEl = document.getElementById('diagram-app-url');
+        if (window.location.protocol === 'file:') {
+          if (codeEl) {
+            codeEl.textContent =
+              'Abra esta página pelo servidor do Vite (ex.: http://localhost:5173/documentation/diagrama-banco.html) para o iframe funcionar.';
+          }
+          return;
+        }
+        if (frame) frame.src = appUrl;
+        if (openLink) openLink.href = appUrl;
+        if (codeEl) codeEl.textContent = appUrl;
+      })();
+    </script>
+  </body>
+</html>
