@@ -12,11 +12,9 @@
         <h1 class="doc-brand">Folha Digital Sólides</h1>
         <span class="tag">Guia — negócio e produto</span>
         <nav class="doc-nav" aria-label="Documentação">
-          <span class="nav-section">Diretoria e negócio</span>
+          <span class="nav-section">Negócio</span>
           <a href="index.html" aria-current="page">Início</a>
-          <a href="diretoria.html">O que vamos entregar</a>
-          <a href="wizard-intro.html">Wizard — visão geral</a>
-          <a href="fluxos.html">Jornada do cliente</a>
+          <a href="o-que-vamos-entregar.html">O que vamos entregar</a>
           <span class="nav-section">Etapas (detalhe)</span>
           <a href="etapa-1.html">1 — Empresa</a>
           <a href="etapa-2.html">2 — Estrutura</a>
@@ -28,6 +26,7 @@
           <a href="projeto.html">Stack e pastas</a>
           <a href="rotas-shell.html">Rotas e shell</a>
           <a href="telas.html">Todas as telas</a>
+          <a href="/#/documentacao/diagrama-banco">Diagrama do banco</a>
         </nav>
       </aside>
       <main class="doc-main doc-main--wide">
@@ -35,7 +34,7 @@
           <p class="doc-hero__eyebrow">Wizard de parametrização</p>
           <h1 class="doc-hero__title">Bem-vindo ao guia da Folha Digital Sólides</h1>
           <p class="doc-hero__lede">
-            Uma leitura pensada para <strong>negócio, produto e diretoria</strong>: entenda o que estamos entregando,
+            Uma leitura pensada para <strong>negócio e produto</strong>: entenda o que estamos entregando,
             por que importa e como as seis etapas do wizard transformam caos de planilhas em jornada guiada — sem pedir
             que você decore sigla de sistema.
           </p>
@@ -45,89 +44,77 @@
           </div>
         </header>
 
-        <p class="fun-note">
-          Se você veio parar aqui por engano procurando o app: ele roda no Vite com rotas tipo
-          <code>#/dashboard</code>. Esta pasta é só documentação estática — tipo “slide que não depende do PowerPoint travar”.
-        </p>
-
-        <h2>Três razões para a diretoria apostar nesta abordagem</h2>
-        <div class="value-grid">
-          <div class="value-card">
-            <div class="value-card__icon" aria-hidden="true">🧭</div>
-            <h3>Rumo claro</h3>
-            <p>
-              Cada etapa tem começo, meio e “o que falta para fechar”. Menos dependência de reunião informal para saber
-              o status do projeto de folha.
-            </p>
-          </div>
-          <div class="value-card">
-            <div class="value-card__icon" aria-hidden="true">🛡️</div>
-            <h3>Risco menor</h3>
-            <p>
-              Documentos e decisões ficam associados ao fluxo. Na hora do pente fino — ou de uma auditoria — não
-              precisamos caçar e-mail de seis meses atrás.
-            </p>
-          </div>
-          <div class="value-card">
-            <div class="value-card__icon" aria-hidden="true">🤝</div>
-            <h3>Alinhamento RH × TI × consultoria</h3>
-            <p>
-              O mesmo roteiro serve para explicar ao cliente externo, ao time interno e à mesa executiva: menos
-              “tradutor humano” no meio.
-            </p>
-          </div>
-        </div>
-
-        <h2>Comece por aqui</h2>
-        <div class="cta-row">
-          <a class="cta-tile" href="diretoria.html">
-            <strong>O que vamos entregar</strong>
-            <span>Texto completo para reunião de diretoria: capítulos, valor, glossário e próximos passos.</span>
-          </a>
-          <a class="cta-tile" href="wizard-intro.html">
-            <strong>Wizard em português claro</strong>
-            <span>Visão geral das seis etapas + como navegar no app.</span>
-          </a>
-          <a class="cta-tile" href="fluxos.html">
-            <strong>Jornada do cliente</strong>
-            <span>Fluxo linear recomendado e dependências entre etapas.</span>
-          </a>
-        </div>
-
-        <h2>Mapa do site (documentação)</h2>
-        <ul>
-          <li>
-            <a href="diretoria.html"><strong>Apresentação à diretoria</strong></a> — narrativa executiva detalhada; ideal para
-            projetor ou PDF impresso.
-          </li>
-          <li>
-            <a href="wizard-intro.html">Visão geral do wizard</a> — resumo das etapas e links para cada capítulo.
-          </li>
-          <li>
-            <a href="etapa-1.html">Etapas 1 a 6</a> — descrição passo a passo (campos, URLs, regras) alinhada ao frontend.
-          </li>
-          <li>
-            <a href="fluxos.html">Fluxos do usuário</a> — macrofluxo login → dashboard → wizard.
-          </li>
-          <li>
-            <span class="badge">Tech</span>
-            <a href="projeto.html">Stack e pastas</a>, <a href="rotas-shell.html">rotas</a>,
-            <a href="telas.html">telas</a> — apêndice para desenvolvimento.
-          </li>
-        </ul>
-
-        <div class="doc-card">
-          <p style="margin-top: 0">
-            <strong>Como abrir no navegador:</strong> com o frontend rodando (<code>npm run dev</code> no projeto Vite),
-            acesse
-            <code>http://localhost:5173/documentation/index.html</code>
-            (ou a URL base do seu ambiente + <code>/documentation/index.html</code>).
+        <section class="doc-map" aria-labelledby="mapa-doc-titulo">
+          <h2 id="mapa-doc-titulo">Mapa da documentação</h2>
+          <p class="doc-map__intro">
+            Cada bloco abaixo responde a um tipo de pergunta. Comece por onde fizer sentido: narrativa para apresentar,
+            etapas para o detalhe de tela, modelo de dados quando for hora de falar de schema e o apêndice técnico
+            quando for hora de código ou arquitetura.
           </p>
-          <p class="muted" style="margin-bottom: 0">
-            A API expõe também o Swagger em <code>/api/docs</code> — útil para quem valida integrações, não para a
-            apresentação de negócio.
-          </p>
-        </div>
+
+          <h3 class="doc-map__section-label">Narrativa e valor</h3>
+          <div class="doc-map__grid">
+            <a class="doc-map-card" href="o-que-vamos-entregar.html">
+              <span class="doc-map-card__icon" aria-hidden="true">📊</span>
+              <span class="doc-map-card__kicker">Executivo</span>
+              <strong class="doc-map-card__title">O que vamos entregar</strong>
+              <p class="doc-map-card__desc">
+                História completa em linguagem de negócio: problema, aposta, os seis “capítulos” do projeto, glossário
+                leigo e sugestões de próximos passos. Ideal para projetor, reunião de alinhamento ou exportar para PDF.
+              </p>
+            </a>
+          </div>
+
+          <h3 class="doc-map__section-label">Produto</h3>
+          <div class="doc-map__grid">
+            <a class="doc-map-card" href="etapa-1.html">
+              <span class="doc-map-card__icon" aria-hidden="true">📋</span>
+              <span class="doc-map-card__kicker">Detalhe operacional</span>
+              <strong class="doc-map-card__title">Etapas 1 a 6</strong>
+              <p class="doc-map-card__desc">
+                Documentação espelhada no app: telas, rotas, campos e regras que o usuário vê em Empresa, Estrutura,
+                Base histórica, Benefícios, Rubricas e eSocial — página a página.
+              </p>
+            </a>
+          </div>
+
+          <h3 class="doc-map__section-label">Modelo de dados</h3>
+          <div class="doc-map__grid">
+            <div class="doc-map-card doc-map-card--static">
+              <span class="doc-map-card__icon" aria-hidden="true">🗄️</span>
+              <span class="doc-map-card__kicker">Banco / ER</span>
+              <strong class="doc-map-card__title">Diagrama e tabelas do schema</strong>
+              <p class="doc-map-card__desc">
+                Página no próprio app: diagrama entidade-relacionamento (Mermaid) derivado do Prisma, visão das relações
+                entre modelos e documentação tabular de colunas, tipos e chaves. Dá para exportar o diagrama em SVG para
+                wiki ou apresentação.
+              </p>
+              <div class="doc-map-card__actions">
+                <a href="/#/documentacao/diagrama-banco">Abrir no app (mesmo site)</a>
+                <a href="https://frontend-opnc.onrender.com/#/documentacao/diagrama-banco">Demonstração online</a>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="doc-map__section-label">Apêndice técnico</h3>
+          <div class="doc-map__grid">
+            <div class="doc-map-card doc-map-card--static">
+              <span class="doc-map-card__icon" aria-hidden="true">⚙️</span>
+              <span class="doc-map-card__kicker">Desenvolvimento</span>
+              <strong class="doc-map-card__title">Stack, rotas e inventário de telas</strong>
+              <p class="doc-map-card__desc">
+                Material para quem mantém ou integra o código: organização do repositório, mapa de rotas do shell e lista
+                das páginas fora do passo a passo do wizard.
+              </p>
+              <div class="doc-map-card__actions">
+                <a href="projeto.html">Stack e pastas</a>
+                <a href="rotas-shell.html">Rotas e shell</a>
+                <a href="telas.html">Todas as telas</a>
+                <a href="/#/documentacao/diagrama-banco">Diagrama do banco</a>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   </body>

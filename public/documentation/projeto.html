@@ -12,11 +12,9 @@
         <h1 class="doc-brand">Folha Digital Sólides</h1>
         <span class="tag">Guia — negócio e produto</span>
         <nav class="doc-nav" aria-label="Documentação">
-          <span class="nav-section">Diretoria e negócio</span>
+          <span class="nav-section">Negócio</span>
           <a href="index.html">Início</a>
-          <a href="diretoria.html">O que vamos entregar</a>
-          <a href="wizard-intro.html">Wizard — visão geral</a>
-          <a href="fluxos.html">Jornada do cliente</a>
+          <a href="o-que-vamos-entregar.html">O que vamos entregar</a>
           <span class="nav-section">Etapas (detalhe)</span>
           <a href="etapa-1.html">1 — Empresa</a>
           <a href="etapa-2.html">2 — Estrutura</a>
@@ -28,14 +26,15 @@
           <a href="projeto.html" aria-current="page">Stack e pastas</a>
           <a href="rotas-shell.html">Rotas e shell</a>
           <a href="telas.html">Todas as telas</a>
+          <a href="/#/documentacao/diagrama-banco">Diagrama do banco</a>
         </nav>
       </aside>
       <main class="doc-main">
         <h1>Visão do projeto <span class="badge">Apêndice técnico</span></h1>
         <div class="doc-card">
           <p style="margin: 0">
-            Esta página é para <strong>desenvolvedores e arquitetos</strong>. Para narrativa de negócio e diretoria, use
-            <a href="diretoria.html">O que vamos entregar</a> ou <a href="index.html">Início</a>.
+            Esta página é para <strong>desenvolvedores e arquitetos</strong>. Para narrativa de negócio, use
+            <a href="o-que-vamos-entregar.html">O que vamos entregar</a> ou <a href="index.html">Início</a>.
           </p>
         </div>
         <p>
@@ -63,6 +62,13 @@
           <li><code>utils/</code> — <code>wizardSteps.ts</code>, <code>brForm.ts</code> (validações BR), etc.</li>
           <li><code>services/</code> — autenticação e cliente HTTP.</li>
         </ul>
+        <h2>Modelo de dados (banco)</h2>
+        <p>
+          Diagrama entidade-relacionamento (Mermaid) e tabelas com colunas e chaves, gerados a partir do schema
+          Prisma via API. Rota pública do app: <code>#/documentacao/diagrama-banco</code> —
+          <a href="/#/documentacao/diagrama-banco">abrir no mesmo site</a> ou
+          <a href="https://frontend-opnc.onrender.com/#/documentacao/diagrama-banco">demonstração online</a>.
+        </p>
         <h2>Autenticação</h2>
         <p>
           Rotas dentro de <code>ProtectedRoute</code> exigem sessão válida (JWT). A página de
