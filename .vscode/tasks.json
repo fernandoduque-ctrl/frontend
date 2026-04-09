@@ -1,0 +1,43 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Kill dev servers (3001, 5173)",
+      "type": "shell",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          ".vscode/kill-dev-ports.ps1"
+        ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "echo '[vscode] Liberando portas 3001, 5173...'; for p in 3001 5173; do fuser -k \"$$p/tcp\" 2>/dev/null || true; done; echo '[vscode] Concluído.'"
+        ]
+      },
+      "osx": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "echo '[vscode] Liberando portas 3001, 5173...'; for p in 3001 5173; do lsof -ti :$$p | xargs kill -9 2>/dev/null || true; done; echo '[vscode] Concluído.'"
+        ]
+      }
+    }
+  ]
+}

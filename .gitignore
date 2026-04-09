@@ -25,5 +25,8 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
+# Local scripts (not tracked)
+scripts/
+
 # Test / coverage
 coverage

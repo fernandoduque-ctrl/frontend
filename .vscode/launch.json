@@ -1,0 +1,55 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "API (NestJS)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "${workspaceFolder}/../backend",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "windows": { "runtimeExecutable": "npm.cmd" }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Web (Vite)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "windows": { "runtimeExecutable": "npm.cmd" }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "API (NestJS) — debug",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:debug"],
+      "cwd": "${workspaceFolder}/../backend",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"],
+      "windows": { "runtimeExecutable": "npm.cmd" }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Monorepo: API + Web",
+      "configurations": ["API (NestJS)", "Web (Vite)"],
+      "preLaunchTask": "Kill dev servers (3001, 5173)",
+      "stopAll": true,
+      "presentation": {
+        "hidden": false,
+        "group": "",
+        "order": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "files.watcherExclude": {
+    "**/backend/lib/**": true,
+    "**/backend/dist/**": true
+  },
+  "search.exclude": {
+    "**/backend/lib/**": true,
+    "**/backend/dist/**": true
+  }
+}

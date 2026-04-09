@@ -362,6 +362,49 @@ body.doc-body--story {
 
 /* —— Apresentação / negócio —— */
 
+.doc-institutional-video {
+  margin: 0 0 2rem;
+}
+
+.doc-institutional-video__frame {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.doc-institutional-video__frame video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.doc-figure {
+  margin: 1.25rem 0 2rem;
+}
+
+.doc-figure__frame {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.doc-figure__frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.doc-figure__caption {
+  margin: 0.65rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
 .doc-hero {
   position: relative;
   padding: 2rem 1.75rem 2.25rem;
