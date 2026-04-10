@@ -37,7 +37,7 @@ function withRequiredEvents(selected: string[]) {
   return [...new Set([...REQUIRED_ES_EVENTS, ...selected])];
 }
 
-export function Stage6({
+export function WizardImportacaoEsocial({
   slug,
   access,
   accessLoading,

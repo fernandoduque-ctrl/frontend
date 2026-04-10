@@ -40,7 +40,7 @@
         <p class="muted">Documentos e conferência de risco · ETA: 20–30 min</p>
         <p>
           <strong>URL base:</strong> <code>#/wizard/etapa-3/</code> · <strong>Código:</strong>
-          <code>frontend/src/pages/wizard/stage3.tsx</code>
+          <code>frontend/src/pages/wizard/WizardHistoricoTrabalhadores.tsx</code>
         </p>
         <p>
           Objetivo: reunir evidências da base (folhas, afastamentos, dependentes, fichas, desoneração, férias) para
@@ -62,7 +62,7 @@
 
         <div class="pass-block">
           <h3><span class="mono">passo-1</span> — Entrada</h3>
-          <p>Introdução e, se disponível, checklist vindo de <code>GET /wizard/stage-3/summary</code>.</p>
+          <p>Introdução e, se disponível, checklist vindo de <code>GET /wizard/historico-trabalhadores/summary</code>.</p>
           <table class="doc-table">
             <thead>
               <tr>
@@ -119,7 +119,7 @@
                 <td>Possui pensão ativa? (estado local)</td>
                 <td>Sim para avançar</td>
                 <td>Determina se uploads são necessários.</td>
-                <td>Radio Sim/Não. Botão “Salvar pensão” → <code>PUT /wizard/stage-3/pension-config</code> com <code>hasActivePension</code>.</td>
+                <td>Radio Sim/Não. Botão “Salvar pensão” → <code>PUT /wizard/historico-trabalhadores/pension-config</code> com <code>hasActivePension</code>.</td>
               </tr>
               <tr>
                 <td>Upload lista pensionistas</td>
@@ -159,7 +159,7 @@
                 <td>Arquivo da folha</td>
                 <td>Por competência</td>
                 <td>Conferência de totais e estrutura.</td>
-                <td>Upload categoria <code>HISTORICAL_PAYROLL</code> + <code>POST /wizard/stage-3/historical-payroll-files</code> com <code>competence</code> e <code>uploadedFileId</code>.</td>
+                <td>Upload categoria <code>HISTORICAL_PAYROLL</code> + <code>POST /wizard/historico-trabalhadores/historical-payroll-files</code> com <code>competence</code> e <code>uploadedFileId</code>.</td>
               </tr>
             </tbody>
           </table>
@@ -292,7 +292,7 @@
               <tr>
                 <td>Enviar ficha</td>
                 <td>Arquivar fichas cadastrais para conferência com etapa 2.</td>
-                <td>Upload + <code>POST /wizard/stage-3/employee-registry-files</code> com <code>uploadedFileId</code>; categoria <code>EMPLOYEE_REGISTRY</code>.</td>
+                <td>Upload + <code>POST /wizard/historico-trabalhadores/employee-registry-files</code> com <code>uploadedFileId</code>; categoria <code>EMPLOYEE_REGISTRY</code>.</td>
               </tr>
             </tbody>
           </table>
@@ -314,7 +314,7 @@
                 <td><code>hasTaxRelief</code></td>
                 <td>Sim</td>
                 <td>Indica se a empresa está em desoneração da folha.</td>
-                <td>Radio Sim/Não → <code>PUT /wizard/stage-3/tax-relief</code>.</td>
+                <td>Radio Sim/Não → <code>PUT /wizard/historico-trabalhadores/tax-relief</code>.</td>
               </tr>
               <tr>
                 <td><code>notes</code></td>
@@ -382,7 +382,7 @@
         <div class="pass-block">
           <h3><span class="mono">resumo</span></h3>
           <p>Tabela comparativa formulário tradicional × wizard; checklist e contadores de <code>s3.counts</code>: <code>historicalPayrollFiles</code>, <code>leaves</code>, <code>dependents</code>, <code>registry</code>, <code>vacations</code>.</p>
-          <p class="doc-note">Botão: <strong>Enviar etapa 3 para validação</strong> → <code>POST /wizard/stages/3/submit</code>.</p>
+          <p class="doc-note">Botão: <strong>Enviar etapa 3 para validação</strong> → <code>POST /wizard/etapas/3/submit</code>.</p>
         </div>
 
         <p><a href="etapa-2.html">← Etapa 2</a> · <a href="etapa-4.html">Etapa 4 →</a></p>

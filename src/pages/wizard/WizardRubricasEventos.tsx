@@ -32,7 +32,7 @@ type PayrollRubricRow = {
   defaultDepartmentId?: string | null;
 };
 
-export function Stage5({ slug }: { slug: string }) {
+export function WizardRubricasEventos({ slug }: { slug: string }) {
   const { message } = App.useApp();
   const qc = useQueryClient();
   const nav = useNavigate();
@@ -64,7 +64,7 @@ export function Stage5({ slug }: { slug: string }) {
     const n = slugToBackendStepNumber(5, slug);
     if (!n) return;
     try {
-      await api.post(`/wizard/steps/5/${n}/complete`, {});
+      await api.post(`/wizard/passos/5/${n}/complete`, {});
     } catch {
       /* seed antigo */
     }
@@ -318,7 +318,7 @@ export function Stage5({ slug }: { slug: string }) {
         <Space wrap>
           <Button
             type="primary"
-            onClick={() => api.post('/wizard/stages/5/submit', {}).then(() => message.success('Enviado'))}
+            onClick={() => api.post('/wizard/etapas/5/submit', {}).then(() => message.success('Enviado'))}
           >
             📤 Enviar etapa 5 para validação
           </Button>

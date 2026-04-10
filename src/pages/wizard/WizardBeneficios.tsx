@@ -49,7 +49,7 @@ type BenefitRow = {
   isActive?: boolean;
 };
 
-export function Stage4({ slug }: { slug: string }) {
+export function WizardBeneficios({ slug }: { slug: string }) {
   const { message } = App.useApp();
   const qc = useQueryClient();
   const nav = useNavigate();
@@ -75,7 +75,7 @@ export function Stage4({ slug }: { slug: string }) {
     const n = slugToBackendStepNumber(4, slug);
     if (!n) return;
     try {
-      await api.post(`/wizard/steps/4/${n}/complete`, {});
+      await api.post(`/wizard/passos/4/${n}/complete`, {});
     } catch {
       /* seed antigo */
     }
@@ -721,7 +721,7 @@ export function Stage4({ slug }: { slug: string }) {
         <Space wrap>
           <Button
             type="primary"
-            onClick={() => api.post('/wizard/stages/4/submit', {}).then(() => message.success('Enviado'))}
+            onClick={() => api.post('/wizard/etapas/4/submit', {}).then(() => message.success('Enviado'))}
           >
             📤 Enviar etapa 4 para validação
           </Button>

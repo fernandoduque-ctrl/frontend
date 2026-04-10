@@ -134,7 +134,7 @@
                 <td>Frontend</td>
                 <td>
                   <code>AppShell</code>, <code>WizardStageLayout</code>, <code>StepOutlet</code> / <code>StepContent</code>,
-                  estágios <code>stage1.tsx</code>…<code>stage6.tsx</code>, React Query para dados, formulários com RHF +
+                  telas do wizard (<code>WizardEmpresaCadastro.tsx</code> … <code>WizardImportacaoEsocial.tsx</code>), React Query para dados, formulários com RHF +
                   Zod onde aplicável, página <code>documentation/diagrama-banco.html</code> (iframe da rota
                   <code>#/documentacao/diagrama-banco</code>)
                 </td>
@@ -281,12 +281,12 @@
               </tr>
               <tr>
                 <td>FE</td>
-                <td><code>stage1.tsx</code>: formulários, React Query (mutations/queries), invalidação de cache</td>
+                <td><code>WizardEmpresaCadastro.tsx</code>: formulários, React Query (mutations/queries), invalidação de cache</td>
                 <td>Paridade com campos obrigatórios do DTO</td>
               </tr>
               <tr>
                 <td>FE</td>
-                <td>Alinhar <code>slugToBackendStepNumber</code> / <code>STAGE_META</code> com progresso real da API</td>
+                <td>Alinhar <code>slugToBackendStepNumber</code> / <code>WIZARD_ETAPA_META</code> com progresso real da API</td>
                 <td>Barra de etapa correta após salvar</td>
               </tr>
             </tbody>
@@ -312,7 +312,7 @@
               </tr>
               <tr>
                 <td>FE</td>
-                <td><code>stage2.tsx</code> passos, validações BR (<code>brForm.ts</code> onde couber)</td>
+                <td><code>WizardFolhaOperacional.tsx</code> passos, validações BR (<code>brForm.ts</code> onde couber)</td>
                 <td>Reuso de componentes de tabela/form Ant Design</td>
               </tr>
               <tr>
@@ -348,7 +348,7 @@
               </tr>
               <tr>
                 <td>FE</td>
-                <td><code>stage3.tsx</code> fluxos longos: estados de loading, erro, retry</td>
+                <td><code>WizardHistoricoTrabalhadores.tsx</code> fluxos longos: estados de loading, erro, retry</td>
                 <td>Query keys estáveis por recurso</td>
               </tr>
             </tbody>
@@ -374,7 +374,7 @@
               </tr>
               <tr>
                 <td>FE</td>
-                <td><code>stage4.tsx</code> formulários dinâmicos por tipo de benefício</td>
+                <td><code>WizardBeneficios.tsx</code> formulários dinâmicos por tipo de benefício</td>
                 <td>Zod schemas por variante</td>
               </tr>
             </tbody>
@@ -405,7 +405,7 @@
               </tr>
               <tr>
                 <td>FE</td>
-                <td><code>stage5.tsx</code> revisão com consultor: estados de rascunho vs confirmado</td>
+                <td><code>WizardRubricasEventos.tsx</code> revisão com consultor: estados de rascunho vs confirmado</td>
                 <td>UX para grandes volumes (virtualização se necessário)</td>
               </tr>
             </tbody>

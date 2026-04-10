@@ -21,6 +21,11 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FieldHelp } from '@/components/wizard/FieldHelp';
+import {
+  QK_WIZARD_EMPRESA_CADASTRO,
+  WIZARD_DOMINIO_REST_PREFIX,
+  qkWizardEtapaProgresso,
+} from '@/constants/wizardEtapaMeta';
 import { api, unwrap } from '@/services/api';
 import { slugToBackendStepNumber } from '@/utils/wizardSteps';
 import { isReasonableBankAgency } from '@/utils/brForm';
@@ -58,11 +63,11 @@ function wizardStatusTag(status: string | undefined): { label: string; color: st
   return map[status || ''] || { label: status || '—', color: 'default' };
 }
 
-export function Stage2Operational({ slug }: { slug: string }) {
+export function WizardFolhaOperacional({ slug }: { slug: string }) {
   const { message } = App.useApp();
   const qc = useQueryClient();
   const nav = useNavigate();
-  const stageNum = 2;
+  const etapaFolhaOperacionalNumero = 2;
   const [wsOpen, setWsOpen] = useState(false);
   const [ccOpen, setCcOpen] = useState(false);
   const [deptOpen, setDeptOpen] = useState(false);
@@ -76,9 +81,9 @@ export function Stage2Operational({ slug }: { slug: string }) {
   const [deptForm] = Form.useForm();
   const [epbForm] = Form.useForm();
 
-  const { data: stageProg } = useQuery({
-    queryKey: ['wizard-stage', stageNum],
-    queryFn: async () => unwrap(await api.get(`/wizard/stages/${stageNum}`)),
+  const { data: etapaProgressoResposta } = useQuery({
+    queryKey: qkWizardEtapaProgresso(etapaFolhaOperacionalNumero),
+    queryFn: async () => unwrap(await api.get(`/wizard/etapas/${etapaFolhaOperacionalNumero}`)),
   });
 
   const { data: dash } = useQuery({
@@ -88,8 +93,8 @@ export function Stage2Operational({ slug }: { slug: string }) {
   });
 
   const { data: w1 } = useQuery({
-    queryKey: ['wizard1'],
-    queryFn: async () => unwrap(await api.get('/wizard/stage-1')),
+    queryKey: QK_WIZARD_EMPRESA_CADASTRO,
+    queryFn: async () => unwrap(await api.get(WIZARD_DOMINIO_REST_PREFIX.empresaCadastro)),
     enabled: slug === 'passo-3',
   });
 
@@ -127,10 +132,10 @@ export function Stage2Operational({ slug }: { slug: string }) {
   };
 
   const completeStep = async () => {
-    const n = slugToBackendStepNumber(stageNum, slug);
+    const n = slugToBackendStepNumber(etapaFolhaOperacionalNumero, slug);
     if (!n) return;
     try {
-      await api.post(`/wizard/steps/${stageNum}/${n}/complete`, {});
+      await api.post(`/wizard/passos/${etapaFolhaOperacionalNumero}/${n}/complete`, {});
     } catch {
       /* opcional se seed antigo */
     }
@@ -227,7 +232,7 @@ export function Stage2Operational({ slug }: { slug: string }) {
   });
 
   const submit = useMutation({
-    mutationFn: () => api.post('/wizard/stages/2/submit', {}).then((r) => unwrap(r)),
+    mutationFn: () => api.post('/wizard/etapas/2/submit', {}).then((r) => unwrap(r)),
     onSuccess: () => message.success('Etapa 2 enviada'),
   });
 
@@ -239,16 +244,17 @@ export function Stage2Operational({ slug }: { slug: string }) {
     },
   });
 
-  const steps = (stageProg as { steps?: { stepNumber: number; title: string; status: string }[] })?.steps;
+  const steps = (etapaProgressoResposta as { steps?: { stepNumber: number; title: string; status: string }[] })
+    ?.steps;
 
   if (slug === 'passo-1') {
-    const st1 = dash?.stages?.find((x: { stageNumber: number }) => x.stageNumber === 1);
-    const st2 = dash?.stages?.find((x: { stageNumber: number }) => x.stageNumber === 2);
-    const st6 = dash?.stages?.find((x: { stageNumber: number }) => x.stageNumber === 6);
+    const etapaEmpresa = dash?.stages?.find((x: { stageNumber: number }) => x.stageNumber === 1);
+    const etapaFolha = dash?.stages?.find((x: { stageNumber: number }) => x.stageNumber === 2);
+    const etapaImportacaoEsocial = dash?.stages?.find((x: { stageNumber: number }) => x.stageNumber === 6);
     const ob = dash?.company?.onboardingStatus;
-    const s1t = wizardStatusTag(st1?.status);
-    const s2t = wizardStatusTag(st2?.status);
-    const s6l = wizardStatusTag(st6?.status);
+    const s1t = wizardStatusTag(etapaEmpresa?.status);
+    const s2t = wizardStatusTag(etapaFolha?.status);
+    const tagImportacaoEsocial = wizardStatusTag(etapaImportacaoEsocial?.status);
     const consult = ob === 'PENDING_VALIDATION' ? { label: 'Pendente', color: 'warning' as const } : ob === 'COMPLETED' ? { label: 'Concluída', color: 'success' as const } : { label: 'Acompanhe as etapas', color: 'default' as const };
     return (
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
@@ -265,7 +271,7 @@ export function Stage2Operational({ slug }: { slug: string }) {
           <Col xs={24} sm={12} lg={6}>
             <Card size="small" title="🟢 Empresa">
               <Tag color={s1t.color} style={{ marginBottom: 8 }}>
-                {st1?.status === 'APPROVED' ? 'Parametrizada' : s1t.label}
+                {etapaEmpresa?.status === 'APPROVED' ? 'Parametrizada' : s1t.label}
               </Tag>
               <Typography.Paragraph type="secondary" style={{ marginBottom: 0 }} ellipsis>
                 Cadastro matriz/filiais (Etapa 1)
@@ -298,7 +304,7 @@ export function Stage2Operational({ slug }: { slug: string }) {
                 {consult.label}
               </Tag>
               <Typography.Paragraph type="secondary" style={{ marginBottom: 0 }}>
-                eSocial: {s6l.label}
+                eSocial: {tagImportacaoEsocial.label}
               </Typography.Paragraph>
             </Card>
           </Col>

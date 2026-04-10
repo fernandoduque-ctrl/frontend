@@ -20,7 +20,12 @@ import { useEffect, useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { api, unwrap } from '@/services/api';
 import { FieldHelp } from '@/components/wizard/FieldHelp';
-import { clearStage1Draft, loadStage1Draft, saveStage1Draft } from '@/constants/wizardDraft';
+import {
+  clearEmpresaCadastroDraft,
+  loadEmpresaCadastroDraft,
+  saveEmpresaCadastroDraft,
+} from '@/constants/wizardDraft';
+import { QK_WIZARD_EMPRESA_CADASTRO, WIZARD_DOMINIO_REST_PREFIX } from '@/constants/wizardEtapaMeta';
 import {
   isValidBrPhone,
   isValidCnpj,
@@ -65,7 +70,7 @@ type Props = {
   form: ReturnType<typeof Form.useForm>[0];
 };
 
-export function Stage1Content({ slug, s1, form }: Props) {
+export function WizardEmpresaCadastro({ slug, s1, form }: Props) {
   const { message } = App.useApp();
   const qc = useQueryClient();
   const watchedDifferentLogos = Form.useWatch('hasDifferentBranchLogos', form);
@@ -83,7 +88,7 @@ export function Stage1Content({ slug, s1, form }: Props) {
 
   useEffect(() => {
     if (!s1?.company) return;
-    const draft = loadStage1Draft(slug);
+    const draft = loadEmpresaCadastroDraft(slug);
     const server: Record<string, unknown> = {};
     if (slug === 'passo-1') server.clientDisplayName = s1.company.clientDisplayName;
     if (slug === 'passo-2') {
@@ -103,22 +108,23 @@ export function Stage1Content({ slug, s1, form }: Props) {
 
   const mClient = useMutation({
     mutationFn: (v: { clientDisplayName: string }) =>
-      api.put('/wizard/stage-1/client', v).then((r) => unwrap(r)),
+      api.put(`${WIZARD_DOMINIO_REST_PREFIX.empresaCadastro}/client`, v).then((r) => unwrap(r)),
     onSuccess: () => {
       message.success('Salvo');
-      clearStage1Draft(slug);
-      qc.invalidateQueries({ queryKey: ['wizard1'] });
+      clearEmpresaCadastroDraft(slug);
+      qc.invalidateQueries({ queryKey: QK_WIZARD_EMPRESA_CADASTRO });
     },
     onError: (e: { response?: { data?: { message?: string } } }) =>
       message.error(e.response?.data?.message || 'Erro'),
   });
 
   const mMatrix = useMutation({
-    mutationFn: (v: Record<string, string>) => api.put('/wizard/stage-1/matrix', v).then((r) => unwrap(r)),
+    mutationFn: (v: Record<string, string>) =>
+      api.put(`${WIZARD_DOMINIO_REST_PREFIX.empresaCadastro}/matrix`, v).then((r) => unwrap(r)),
     onSuccess: () => {
       message.success('Dados da matriz salvos');
-      clearStage1Draft(slug);
-      qc.invalidateQueries({ queryKey: ['wizard1'] });
+      clearEmpresaCadastroDraft(slug);
+      qc.invalidateQueries({ queryKey: QK_WIZARD_EMPRESA_CADASTRO });
     },
     onError: (e: { response?: { data?: { message?: string } } }) =>
       message.error(e.response?.data?.message || 'Erro'),
@@ -126,21 +132,21 @@ export function Stage1Content({ slug, s1, form }: Props) {
 
   const mBranchesCfg = useMutation({
     mutationFn: (v: { hasBranches: boolean }) =>
-      api.put('/wizard/stage-1/branches-config', v).then((r) => unwrap(r)),
+      api.put(`${WIZARD_DOMINIO_REST_PREFIX.empresaCadastro}/branches-config`, v).then((r) => unwrap(r)),
     onSuccess: () => {
       message.success('Salvo');
-      clearStage1Draft(slug);
-      qc.invalidateQueries({ queryKey: ['wizard1'] });
+      clearEmpresaCadastroDraft(slug);
+      qc.invalidateQueries({ queryKey: QK_WIZARD_EMPRESA_CADASTRO });
     },
   });
 
   const mBranding = useMutation({
     mutationFn: (v: { hasDifferentBranchLogos: boolean }) =>
-      api.put('/wizard/stage-1/branding', v).then((r) => unwrap(r)),
+      api.put(`${WIZARD_DOMINIO_REST_PREFIX.empresaCadastro}/branding`, v).then((r) => unwrap(r)),
     onSuccess: () => {
       message.success('Salvo');
-      clearStage1Draft(slug);
-      qc.invalidateQueries({ queryKey: ['wizard1'] });
+      clearEmpresaCadastroDraft(slug);
+      qc.invalidateQueries({ queryKey: QK_WIZARD_EMPRESA_CADASTRO });
     },
   });
 
@@ -156,35 +162,35 @@ export function Stage1Content({ slug, s1, form }: Props) {
     }) => {
       const up = await uploadBlob(file, scope === 'COMPANY' ? 'LOGO_COMPANY' : 'LOGO_BRANCH');
       return api
-        .post('/wizard/stage-1/logo', { uploadedFileId: up.id, scope, branchId })
+        .post(`${WIZARD_DOMINIO_REST_PREFIX.empresaCadastro}/logo`, { uploadedFileId: up.id, scope, branchId })
         .then((r) => unwrap(r));
     },
     onSuccess: () => {
       message.success('Logotipo vinculado');
-      qc.invalidateQueries({ queryKey: ['wizard1'] });
+      qc.invalidateQueries({ queryKey: QK_WIZARD_EMPRESA_CADASTRO });
     },
   });
 
   const mBranchAdd = useMutation({
     mutationFn: (v: { name: string; legalName?: string; taxId?: string }) =>
-      api.post('/wizard/stage-1/branches', v).then((r) => unwrap(r)),
+      api.post(`${WIZARD_DOMINIO_REST_PREFIX.empresaCadastro}/branches`, v).then((r) => unwrap(r)),
     onSuccess: () => {
       message.success('Filial cadastrada');
       branchForm.resetFields();
-      qc.invalidateQueries({ queryKey: ['wizard1'] });
+      qc.invalidateQueries({ queryKey: QK_WIZARD_EMPRESA_CADASTRO });
     },
     onError: (e: { response?: { data?: { message?: string } } }) =>
       message.error(e.response?.data?.message || 'Erro ao cadastrar filial'),
   });
 
   const submitStage = useMutation({
-    mutationFn: (n: number) => api.post(`/wizard/stages/${n}/submit`, {}).then((r) => unwrap(r)),
+    mutationFn: (n: number) => api.post(`/wizard/etapas/${n}/submit`, {}).then((r) => unwrap(r)),
     onSuccess: () => message.success('Enviado para validação consultiva'),
   });
 
   const saveDraftOnly = () => {
     const v = form.getFieldsValue();
-    saveStage1Draft(slug, v);
+    saveEmpresaCadastroDraft(slug, v);
     message.success('Rascunho guardado neste navegador. Você pode continuar depois.');
   };
 
@@ -676,16 +682,16 @@ export function Stage1Content({ slug, s1, form }: Props) {
   }
 
   if (slug === 'resumo') {
-    return <Stage1Summary onSubmit={() => submitStage.mutate(1)} loading={submitStage.isPending} />;
+    return <WizardEmpresaCadastroResumo onSubmit={() => submitStage.mutate(1)} loading={submitStage.isPending} />;
   }
 
   return null;
 }
 
-function Stage1Summary({ onSubmit, loading }: { onSubmit: () => void; loading: boolean }) {
+function WizardEmpresaCadastroResumo({ onSubmit, loading }: { onSubmit: () => void; loading: boolean }) {
   const { data } = useQuery({
     queryKey: ['w1sum'],
-    queryFn: async () => unwrap(await api.get('/wizard/stage-1/summary')),
+    queryFn: async () => unwrap(await api.get(`${WIZARD_DOMINIO_REST_PREFIX.empresaCadastro}/summary`)),
   });
   const labels: Record<string, string> = {
     clientNamed: 'Nome do cliente / empresa informado',

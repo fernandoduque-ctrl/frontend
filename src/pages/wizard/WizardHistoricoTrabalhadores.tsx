@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UploadOutlined } from '@ant-design/icons';
 import { FieldHelp } from '@/components/wizard/FieldHelp';
+import { WIZARD_DOMINIO_REST_PREFIX } from '@/constants/wizardEtapaMeta';
 import { api, unwrap } from '@/services/api';
 import { slugToBackendStepNumber } from '@/utils/wizardSteps';
 import { isValidCpf, maskCpf, onlyDigits } from '@/utils/brForm';
@@ -34,8 +35,8 @@ const DEPENDENCY_TYPE_OPTIONS = [
   { value: 'OUTRO', label: 'Outro (especificar observação)' },
 ];
 
-/** Alinhado ao checklist final do documento (chaves = API /wizard/stage-3/summary). */
-const STAGE3_CHECKLIST_LABELS: Record<string, string> = {
+/** Alinhado ao checklist final do documento (chaves = GET .../historico-trabalhadores/summary). */
+const HISTORICO_TRABALHADORES_CHECKLIST_LABELS: Record<string, string> = {
   pension: 'Pensionistas validados',
   historicalThreeMonths: 'Histórico de folha conferido (3 competências)',
   leavesMapped: 'Afastamentos mapeados',
@@ -45,7 +46,7 @@ const STAGE3_CHECKLIST_LABELS: Record<string, string> = {
   vacations: 'Férias conferidas',
 };
 
-export function Stage3({ slug }: { slug: string }) {
+export function WizardHistoricoTrabalhadores({ slug }: { slug: string }) {
   const { message } = App.useApp();
   const nav = useNavigate();
   const qc = useQueryClient();
@@ -61,8 +62,8 @@ export function Stage3({ slug }: { slug: string }) {
   const [taxReliefForm] = Form.useForm();
 
   const { data: s3 } = useQuery({
-    queryKey: ['s3sum'],
-    queryFn: async () => unwrap(await api.get('/wizard/stage-3/summary')),
+    queryKey: ['wizard', 'historico-trabalhadores', 'summary'],
+    queryFn: async () => unwrap(await api.get(`${WIZARD_DOMINIO_REST_PREFIX.historicoTrabalhadores}/summary`)),
     enabled: slug === 'resumo' || slug === 'passo-1',
   });
 
@@ -86,7 +87,7 @@ export function Stage3({ slug }: { slug: string }) {
     const n = slugToBackendStepNumber(3, slug);
     if (!n) return;
     try {
-      await api.post(`/wizard/steps/3/${n}/complete`, {});
+      await api.post(`/wizard/passos/3/${n}/complete`, {});
     } catch {
       /* seed antigo */
     }
@@ -135,7 +136,7 @@ export function Stage3({ slug }: { slug: string }) {
             <ul>
               {Object.entries(s3.checklist as Record<string, boolean>).map(([k, v]) => (
                 <li key={k}>
-                  {STAGE3_CHECKLIST_LABELS[k] || k}: {v ? '✔' : '—'}
+                  {HISTORICO_TRABALHADORES_CHECKLIST_LABELS[k] || k}: {v ? '✔' : '—'}
                 </li>
               ))}
             </ul>
@@ -189,7 +190,7 @@ export function Stage3({ slug }: { slug: string }) {
           type="primary"
           disabled={pension === null}
           onClick={async () => {
-            await api.put('/wizard/stage-3/pension-config', {
+            await api.put(`${WIZARD_DOMINIO_REST_PREFIX.historicoTrabalhadores}/pension-config`, {
               hasActivePension: pension === true,
             });
             message.success('Salvo');
@@ -224,7 +225,7 @@ export function Stage3({ slug }: { slug: string }) {
             const comp = prompt('Competência (AAAA-MM)?');
             if (!comp) return false;
             const up = await uploadBlob(file, 'HISTORICAL_PAYROLL');
-            await api.post('/wizard/stage-3/historical-payroll-files', {
+            await api.post(`${WIZARD_DOMINIO_REST_PREFIX.historicoTrabalhadores}/historical-payroll-files`, {
               competence: comp,
               uploadedFileId: up.id,
             });
@@ -488,7 +489,9 @@ export function Stage3({ slug }: { slug: string }) {
         <Upload
           beforeUpload={async (file) => {
             const up = await uploadBlob(file, 'EMPLOYEE_REGISTRY');
-            await api.post('/wizard/stage-3/employee-registry-files', { uploadedFileId: up.id });
+            await api.post(`${WIZARD_DOMINIO_REST_PREFIX.historicoTrabalhadores}/employee-registry-files`, {
+              uploadedFileId: up.id,
+            });
             message.success('Ficha registrada');
             await tryComplete();
             return false;
@@ -512,7 +515,7 @@ export function Stage3({ slug }: { slug: string }) {
           form={taxReliefForm}
           layout="vertical"
           onFinish={async (v) => {
-            await api.put('/wizard/stage-3/tax-relief', {
+            await api.put(`${WIZARD_DOMINIO_REST_PREFIX.historicoTrabalhadores}/tax-relief`, {
               hasTaxRelief: v.hasTaxRelief,
               notes: v.notes || undefined,
             });
@@ -654,7 +657,7 @@ export function Stage3({ slug }: { slug: string }) {
           <ul style={{ paddingLeft: 20, margin: 0 }}>
             {Object.entries(s3.checklist as Record<string, boolean>).map(([k, v]) => (
               <li key={k}>
-                {v ? '✔' : '—'} {STAGE3_CHECKLIST_LABELS[k] || k}
+                {v ? '✔' : '—'} {HISTORICO_TRABALHADORES_CHECKLIST_LABELS[k] || k}
               </li>
             ))}
           </ul>
@@ -692,7 +695,7 @@ export function Stage3({ slug }: { slug: string }) {
           <Button
             type="primary"
             onClick={() =>
-              api.post('/wizard/stages/3/submit', {}).then(() => {
+              api.post('/wizard/etapas/3/submit', {}).then(() => {
                 message.success('Enviado para validação');
                 qc.invalidateQueries();
               })

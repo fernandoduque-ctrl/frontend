@@ -2,13 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, Col, Row, Typography, Button, Tag } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { api, unwrap } from '@/services/api';
-import { STAGE_META, stagePath } from '@/constants/stageMeta';
+import { QK_WIZARD_ETAPAS_LISTA, WIZARD_ETAPA_META, wizardEtapaPath } from '@/constants/wizardEtapaMeta';
 
 export function WizardHomePage() {
   const nav = useNavigate();
   const { data: stages } = useQuery({
-    queryKey: ['wizard-stages'],
-    queryFn: async () => unwrap(await api.get('/wizard/stages')),
+    queryKey: QK_WIZARD_ETAPAS_LISTA,
+    queryFn: async () => unwrap(await api.get('/wizard/etapas')),
   });
 
   return (
@@ -20,7 +20,7 @@ export function WizardHomePage() {
       </Typography.Paragraph>
       <Row gutter={[16, 16]}>
         {[1, 2, 3, 4, 5, 6].map((n) => {
-          const meta = STAGE_META[n];
+          const meta = WIZARD_ETAPA_META[n];
           const st = stages?.find((x: { stageNumber: number }) => x.stageNumber === n);
           return (
             <Col xs={24} md={12} lg={8} key={n}>
@@ -28,7 +28,7 @@ export function WizardHomePage() {
                 title={`Etapa ${n}`}
                 extra={st && <Tag>{st.status}</Tag>}
                 actions={[
-                  <Button type="link" key="go" onClick={() => nav(`/wizard/${stagePath(n)}`)}>
+                  <Button type="link" key="go" onClick={() => nav(`/wizard/${wizardEtapaPath(n)}`)}>
                     Abrir
                   </Button>,
                 ]}

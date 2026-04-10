@@ -1,8 +1,9 @@
-export type StageStep = { path: string; label: string };
+export type WizardEtapaPasso = { path: string; label: string };
 
-export const STAGE_META: Record<
+/** Metadados de UI por número da etapa (1–6), alinhados ao assistente. */
+export const WIZARD_ETAPA_META: Record<
   number,
-  { title: string; subtitle: string; eta: string; steps: StageStep[] }
+  { title: string; subtitle: string; eta: string; steps: WizardEtapaPasso[] }
 > = {
   1: {
     title: 'Identificação e cadastro da empresa',
@@ -89,6 +90,30 @@ export const STAGE_META: Record<
   },
 };
 
-export function stagePath(num: number) {
+/** Segmento da rota do app (`#/wizard/etapa-N/...`). */
+export function wizardEtapaPath(num: number) {
   return `etapa-${num}`;
+}
+
+/** Bases REST por domínio (espelham os `@Controller` Nest em `wizard-*`). */
+export const WIZARD_DOMINIO_REST_PREFIX = {
+  empresaCadastro: '/wizard/empresa-cadastro',
+  folhaOperacional: '/wizard/folha-operacional',
+  historicoTrabalhadores: '/wizard/historico-trabalhadores',
+  beneficios: '/wizard/beneficios',
+  rubricasEventos: '/wizard/rubricas-eventos',
+  importacaoEsocial: '/wizard/importacao-esocial',
+} as const;
+
+/** React Query — payload principal da etapa empresa (GET domínio empresa-cadastro). */
+export const QK_WIZARD_EMPRESA_CADASTRO = ['wizard', 'empresa-cadastro'] as const;
+
+/** React Query — pré-requisitos da importação eSocial. */
+export const QK_WIZARD_IMPORTACAO_ESOCIAL_ACCESS = ['wizard', 'importacao-esocial', 'access'] as const;
+
+/** React Query — lista de etapas do assistente (`GET /wizard/etapas`). */
+export const QK_WIZARD_ETAPAS_LISTA = ['wizard', 'etapas'] as const;
+
+export function qkWizardEtapaProgresso(etapaNumero: number) {
+  return ['wizard', 'etapa', etapaNumero, 'progresso'] as const;
 }

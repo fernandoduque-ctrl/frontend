@@ -81,10 +81,10 @@
         <h2>Componentes de rota (wizard)</h2>
         <ul>
           <li><code>StepOutlet</code> — lê <code>etapa</code> e <code>stepSlug</code> dos params e renderiza <code>StepContent</code>.</li>
-          <li><code>StepContent</code> — escolhe <code>stage1</code> … <code>stage6</code> conforme o número da etapa.</li>
+          <li><code>StepContent</code> — monta <code>WizardEmpresaCadastro</code>, <code>WizardFolhaOperacional</code>, etc., conforme o número da etapa (<code>etapa-1</code> … <code>etapa-6</code> na URL).</li>
         </ul>
         <p class="muted">
-          O mapeamento de slug para progresso no backend está em <code>slugToBackendStepNumber</code> (<code>utils/wizardSteps.ts</code>) usando <code>STAGE_META</code>.
+          O mapeamento de slug para progresso no backend está em <code>slugToBackendStepNumber</code> (<code>utils/wizardSteps.ts</code>) usando <code>WIZARD_ETAPA_META</code>.
         </p>
       </main>
     </div>
