@@ -1,5 +1,5 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Space, Tooltip, Typography } from 'antd';
+import { Space, Tooltip, Typography } from '@/ds';
 
 type Props = { title: string; help: string; example?: string };
 

@@ -1,4 +1,4 @@
-import { App, Button, Form, Input } from 'antd';
+import { App, Button, Form, Input } from '@/ds';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthLayout } from '@/layouts/AuthLayout';
 import { ACTIVE_COMPANY_ID_KEY, TOKEN_KEY } from '@/constants/storageKeys';

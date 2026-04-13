@@ -17,7 +17,7 @@ import {
   Tag,
   Typography,
   App,
-} from 'antd';
+} from '@/ds';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FieldHelp } from '@/components/wizard/FieldHelp';
@@ -27,6 +27,16 @@ import {
   qkWizardEtapaProgresso,
 } from '@/constants/wizardEtapaMeta';
 import { api, unwrap } from '@/services/api';
+import type {
+  BankReferenceItem,
+  CostCenterListItem,
+  DashboardSummary,
+  DepartmentListItem,
+  EmployeePaymentBankItem,
+  ImportCsvMutationResult,
+  WizardEmpresaS1Payload,
+  WizardEtapaDetalhePayload,
+} from '@/types/apiResponses';
 import { slugToBackendStepNumber } from '@/utils/wizardSteps';
 import { isReasonableBankAgency } from '@/utils/brForm';
 import { workScheduleLegalHints } from '@/utils/workScheduleHints';
@@ -83,18 +93,19 @@ export function WizardFolhaOperacional({ slug }: { slug: string }) {
 
   const { data: etapaProgressoResposta } = useQuery({
     queryKey: qkWizardEtapaProgresso(etapaFolhaOperacionalNumero),
-    queryFn: async () => unwrap(await api.get(`/wizard/etapas/${etapaFolhaOperacionalNumero}`)),
+    queryFn: async () =>
+      unwrap<WizardEtapaDetalhePayload>(await api.get(`/wizard/etapas/${etapaFolhaOperacionalNumero}`)),
   });
 
   const { data: dash } = useQuery({
     queryKey: ['dash'],
-    queryFn: async () => unwrap(await api.get('/dashboard/summary')),
+    queryFn: async () => unwrap<DashboardSummary>(await api.get('/dashboard/summary')),
     enabled: slug === 'passo-1' || slug === 'resumo',
   });
 
   const { data: w1 } = useQuery({
     queryKey: QK_WIZARD_EMPRESA_CADASTRO,
-    queryFn: async () => unwrap(await api.get(WIZARD_DOMINIO_REST_PREFIX.empresaCadastro)),
+    queryFn: async () => unwrap<WizardEmpresaS1Payload>(await api.get(WIZARD_DOMINIO_REST_PREFIX.empresaCadastro)),
     enabled: slug === 'passo-3',
   });
 
@@ -105,22 +116,22 @@ export function WizardFolhaOperacional({ slug }: { slug: string }) {
   });
   const { data: cc } = useQuery({
     queryKey: ['cc'],
-    queryFn: async () => unwrap(await api.get('/cost-centers')),
+    queryFn: async () => unwrap<CostCenterListItem[]>(await api.get('/cost-centers')),
     enabled: slug === 'passo-3' || slug === 'passo-1' || slug === 'resumo',
   });
   const { data: banks } = useQuery({
     queryKey: ['banks'],
-    queryFn: async () => unwrap(await api.get('/banks')),
+    queryFn: async () => unwrap<BankReferenceItem[]>(await api.get('/banks')),
     enabled: slug === 'passo-4' || slug === 'resumo',
   });
   const { data: epb } = useQuery({
     queryKey: ['epb'],
-    queryFn: async () => unwrap(await api.get('/employee-payment-banks')),
+    queryFn: async () => unwrap<EmployeePaymentBankItem[]>(await api.get('/employee-payment-banks')),
     enabled: slug === 'passo-4' || slug === 'resumo',
   });
   const { data: dept } = useQuery({
     queryKey: ['dept'],
-    queryFn: async () => unwrap(await api.get('/departments')),
+    queryFn: async () => unwrap<DepartmentListItem[]>(await api.get('/departments')),
     enabled: slug === 'passo-5' || slug === 'resumo',
   });
 
@@ -165,7 +176,8 @@ export function WizardFolhaOperacional({ slug }: { slug: string }) {
   });
 
   const mWsCsv = useMutation({
-    mutationFn: async () => unwrap(await api.post('/work-schedules/import-csv', { csv: wsCsv })),
+    mutationFn: async () =>
+      unwrap<ImportCsvMutationResult>(await api.post('/work-schedules/import-csv', { csv: wsCsv })),
     onSuccess: (r: { errors?: string[] }) => {
       message.success('Importação concluída');
       if (r?.errors?.length) message.warning(`${r.errors.length} linha(s) com aviso — veja resposta na rede`);
@@ -192,7 +204,8 @@ export function WizardFolhaOperacional({ slug }: { slug: string }) {
   });
 
   const mCcCsv = useMutation({
-    mutationFn: async () => unwrap(await api.post('/cost-centers/import-csv', { csv: ccCsv })),
+    mutationFn: async () =>
+      unwrap<ImportCsvMutationResult>(await api.post('/cost-centers/import-csv', { csv: ccCsv })),
     onSuccess: (r: { errors?: string[] }) => {
       message.success('CC importados');
       if (r?.errors?.length) message.warning(`${r.errors.length} linha(s) com aviso`);
@@ -244,8 +257,7 @@ export function WizardFolhaOperacional({ slug }: { slug: string }) {
     },
   });
 
-  const steps = (etapaProgressoResposta as { steps?: { stepNumber: number; title: string; status: string }[] })
-    ?.steps;
+  const steps = etapaProgressoResposta?.steps;
 
   if (slug === 'passo-1') {
     const etapaEmpresa = dash?.stages?.find((x: { stageNumber: number }) => x.stageNumber === 1);
@@ -601,7 +613,7 @@ export function WizardFolhaOperacional({ slug }: { slug: string }) {
               <Select
                 allowClear
                 placeholder="Matriz ou filial com empregados"
-                options={(w1?.company?.branches as { id: string; name: string }[] | undefined)?.map((b) => ({
+                options={w1?.company?.branches?.map((b) => ({
                   value: b.id,
                   label: b.name,
                 }))}
@@ -660,7 +672,7 @@ export function WizardFolhaOperacional({ slug }: { slug: string }) {
               <Select
                 showSearch
                 optionFilterProp="label"
-                options={(banks as { id: string; code: string; name: string }[] | undefined)?.map((b) => ({
+                options={banks?.map((b) => ({
                   value: b.id,
                   label: `${b.code} — ${b.name}`,
                 }))}
@@ -748,7 +760,7 @@ export function WizardFolhaOperacional({ slug }: { slug: string }) {
             >
               <Select
                 allowClear
-                options={(cc as { id: string; code: string; name: string }[] | undefined)?.map((c) => ({
+                options={cc?.map((c) => ({
                   value: c.id,
                   label: `${c.code} — ${c.name}`,
                 }))}

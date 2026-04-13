@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { Card, Col, Row, Typography, Button, List, Tag, Progress, Space } from 'antd';
+import { Card, Col, Row, Typography, Button, List, Tag, Progress, Space } from '@/ds';
 import { useNavigate } from 'react-router-dom';
 import { api, unwrap } from '@/services/api';
+import type { DashboardSummary } from '@/types/apiResponses';
 
 export function DashboardPage() {
   const nav = useNavigate();
   const { data, isLoading } = useQuery({
     queryKey: ['dash'],
-    queryFn: async () => unwrap(await api.get('/dashboard/summary')),
+    queryFn: async () => unwrap<DashboardSummary>(await api.get('/dashboard/summary')),
   });
 
   if (isLoading || !data) {
@@ -39,14 +40,7 @@ export function DashboardPage() {
       </Row>
       <Typography.Title level={5}>Etapas</Typography.Title>
       <Row gutter={[16, 16]}>
-        {(data.stages || []).map(
-          (s: {
-            stageNumber: number;
-            title: string;
-            status: string;
-            stepProgress: number;
-            updatedAt: string;
-          }) => (
+        {(data.stages || []).map((s) => (
             <Col xs={24} sm={12} lg={8} key={s.stageNumber}>
               <Card
                 size="small"

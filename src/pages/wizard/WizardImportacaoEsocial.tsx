@@ -13,11 +13,16 @@ import {
   Tabs,
   Typography,
   App,
-} from 'antd';
+} from '@/ds';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api, unwrap } from '@/services/api';
+import type {
+  EsocialAlertItem,
+  EsocialBatchDetailPayload,
+  EsocialBatchPreviewPayload,
+} from '@/types/apiResponses';
 import { downloadAuthenticatedTextFile } from '@/utils/downloadText';
 import { getEsocialBatchId, setEsocialBatchId } from './esocialBatch';
 
@@ -282,12 +287,13 @@ function EsocialPreview() {
   const id = getEsocialBatchId();
   const { data: preview } = useQuery({
     queryKey: ['esoc-prev', id],
-    queryFn: async () => unwrap(await api.get(`/esocial-import/batches/${id}/preview`)),
+    queryFn: async () =>
+      unwrap<EsocialBatchPreviewPayload>(await api.get(`/esocial-import/batches/${id}/preview`)),
     enabled: !!id,
   });
   const { data: alerts } = useQuery({
     queryKey: ['esoc-alerts', id],
-    queryFn: async () => unwrap(await api.get(`/esocial-import/batches/${id}/alerts`)),
+    queryFn: async () => unwrap<EsocialAlertItem[]>(await api.get(`/esocial-import/batches/${id}/alerts`)),
     enabled: !!id,
   });
   if (!id) return <Alert message="Processe o passo 5 antes." type="warning" />;
@@ -392,6 +398,7 @@ function EsocialPreview() {
 }
 
 function EsocialConfirm() {
+  const { message } = App.useApp();
   const id = getEsocialBatchId();
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -442,7 +449,7 @@ function EsocialStatus() {
   const id = getEsocialBatchId();
   const { data } = useQuery({
     queryKey: ['esoc-batch', id],
-    queryFn: async () => unwrap(await api.get(`/esocial-import/batches/${id}`)),
+    queryFn: async () => unwrap<EsocialBatchDetailPayload>(await api.get(`/esocial-import/batches/${id}`)),
     enabled: !!id,
   });
   return (

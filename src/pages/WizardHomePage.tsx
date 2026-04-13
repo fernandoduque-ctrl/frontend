@@ -1,14 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import { Card, Col, Row, Typography, Button, Tag } from 'antd';
+import { Card, Col, Row, Typography, Button, Tag } from '@/ds';
 import { useNavigate } from 'react-router-dom';
 import { api, unwrap } from '@/services/api';
+import type { WizardEtapaListItem } from '@/types/apiResponses';
 import { QK_WIZARD_ETAPAS_LISTA, WIZARD_ETAPA_META, wizardEtapaPath } from '@/constants/wizardEtapaMeta';
 
 export function WizardHomePage() {
   const nav = useNavigate();
   const { data: stages } = useQuery({
     queryKey: QK_WIZARD_ETAPAS_LISTA,
-    queryFn: async () => unwrap(await api.get('/wizard/etapas')),
+    queryFn: async () => unwrap<WizardEtapaListItem[]>(await api.get('/wizard/etapas')),
   });
 
   return (

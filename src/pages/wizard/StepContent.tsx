@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { Form, Typography } from 'antd';
+import { Form, Typography } from '@/ds';
 import { api, unwrap } from '@/services/api';
+import type { WizardEmpresaS1Payload, WizardImportacaoEsocialAccessPayload } from '@/types/apiResponses';
 import {
   QK_WIZARD_EMPRESA_CADASTRO,
   QK_WIZARD_IMPORTACAO_ESOCIAL_ACCESS,
@@ -18,13 +19,17 @@ export function StepContent({ etapaNumero, slug }: { etapaNumero: number; slug: 
 
   const { data: s1 } = useQuery({
     queryKey: QK_WIZARD_EMPRESA_CADASTRO,
-    queryFn: async () => unwrap(await api.get(WIZARD_DOMINIO_REST_PREFIX.empresaCadastro)),
+    queryFn: async () =>
+      unwrap<WizardEmpresaS1Payload>(await api.get(WIZARD_DOMINIO_REST_PREFIX.empresaCadastro)),
     enabled: etapaNumero === 1,
   });
 
   const { data: acessoImportacaoEsocial, isLoading: acessoImportacaoEsocialLoading } = useQuery({
     queryKey: QK_WIZARD_IMPORTACAO_ESOCIAL_ACCESS,
-    queryFn: async () => unwrap(await api.get(`${WIZARD_DOMINIO_REST_PREFIX.importacaoEsocial}/access`)),
+    queryFn: async () =>
+      unwrap<WizardImportacaoEsocialAccessPayload>(
+        await api.get(`${WIZARD_DOMINIO_REST_PREFIX.importacaoEsocial}/access`),
+      ),
     enabled: etapaNumero === 6,
   });
 

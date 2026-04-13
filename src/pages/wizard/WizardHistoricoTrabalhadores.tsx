@@ -14,7 +14,7 @@ import {
   Typography,
   Upload,
   App,
-} from 'antd';
+} from '@/ds';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +22,12 @@ import { UploadOutlined } from '@ant-design/icons';
 import { FieldHelp } from '@/components/wizard/FieldHelp';
 import { WIZARD_DOMINIO_REST_PREFIX } from '@/constants/wizardEtapaMeta';
 import { api, unwrap } from '@/services/api';
+import type {
+  DependentRecordDto,
+  LeaveRecordDto,
+  VacationRecordDto,
+  WizardHistoricoTrabalhadoresSummaryPayload,
+} from '@/types/apiResponses';
 import { slugToBackendStepNumber } from '@/utils/wizardSteps';
 import { isValidCpf, maskCpf, onlyDigits } from '@/utils/brForm';
 import { uploadBlob } from './uploadBlob';
@@ -63,23 +69,26 @@ export function WizardHistoricoTrabalhadores({ slug }: { slug: string }) {
 
   const { data: s3 } = useQuery({
     queryKey: ['wizard', 'historico-trabalhadores', 'summary'],
-    queryFn: async () => unwrap(await api.get(`${WIZARD_DOMINIO_REST_PREFIX.historicoTrabalhadores}/summary`)),
+    queryFn: async () =>
+      unwrap<WizardHistoricoTrabalhadoresSummaryPayload>(
+        await api.get(`${WIZARD_DOMINIO_REST_PREFIX.historicoTrabalhadores}/summary`),
+      ),
     enabled: slug === 'resumo' || slug === 'passo-1',
   });
 
   const { data: leaves } = useQuery({
     queryKey: ['leave-records'],
-    queryFn: async () => unwrap(await api.get('/leave-records')),
+    queryFn: async () => unwrap<LeaveRecordDto[]>(await api.get('/leave-records')),
     enabled: ['passo-4', 'resumo', 'passo-1'].includes(slug),
   });
   const { data: dependents } = useQuery({
     queryKey: ['dependent-records'],
-    queryFn: async () => unwrap(await api.get('/dependent-records')),
+    queryFn: async () => unwrap<DependentRecordDto[]>(await api.get('/dependent-records')),
     enabled: ['passo-5', 'resumo', 'passo-1'].includes(slug),
   });
   const { data: vacations } = useQuery({
     queryKey: ['vacation-records'],
-    queryFn: async () => unwrap(await api.get('/vacation-records')),
+    queryFn: async () => unwrap<VacationRecordDto[]>(await api.get('/vacation-records')),
     enabled: ['passo-8', 'resumo', 'passo-1'].includes(slug),
   });
 

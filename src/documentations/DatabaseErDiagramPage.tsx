@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Card, Spin, Table, Typography } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import {
+  Alert,
+  Button,
+  Card,
+  Spin,
+  Table,
+  Typography,
+  type ColumnsType,
+} from '@/ds';
 import { DownloadOutlined } from '@ant-design/icons';
 import { api, unwrap } from '@/services/api';
 import { downloadBlobContent } from '@/utils/downloadText';

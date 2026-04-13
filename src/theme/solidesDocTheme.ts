@@ -1,4 +1,4 @@
-import type { ThemeConfig } from 'antd';
+import type { ThemeConfig } from '@/ds';
 
 /** Paleta espelhada de `public/documentation/styles.css` */
 export const SOL_BRAND = '#702670';

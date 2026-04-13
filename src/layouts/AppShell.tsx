@@ -6,7 +6,7 @@ import {
   Space,
   Breadcrumb,
   theme,
-} from 'antd';
+} from '@/ds';
 import {
   DashboardOutlined,
   SettingOutlined,

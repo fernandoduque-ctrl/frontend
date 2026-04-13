@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { App, Card, Table, Tag, Button, Upload, Switch, Input, Space } from 'antd';
+import { App, Card, Table, Tag, Button, Upload, Switch, Input, Space } from '@/ds';
 import { UploadOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { api, unwrap } from '@/services/api';

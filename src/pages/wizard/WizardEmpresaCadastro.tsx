@@ -15,7 +15,7 @@ import {
   Typography,
   Upload,
   App,
-} from 'antd';
+} from '@/ds';
 import { useEffect, useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { api, unwrap } from '@/services/api';
@@ -26,6 +26,7 @@ import {
   saveEmpresaCadastroDraft,
 } from '@/constants/wizardDraft';
 import { QK_WIZARD_EMPRESA_CADASTRO, WIZARD_DOMINIO_REST_PREFIX } from '@/constants/wizardEtapaMeta';
+import type { WizardEmpresaEtapa1SummaryPayload, WizardEmpresaS1Company } from '@/types/apiResponses';
 import {
   isValidBrPhone,
   isValidCnpj,
@@ -52,21 +53,9 @@ const MAX_BRANCH_CNPJ_FILES = 10;
 const ACCEPT_CNPJ_DOC = 'application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp';
 const ACCEPT_LOGO = 'image/png,image/jpeg,.png,.jpg,.jpeg';
 
-type S1Company = {
-  clientDisplayName?: string;
-  legalName?: string | null;
-  taxId?: string | null;
-  contactEmail?: string | null;
-  contactPhone?: string | null;
-  hasBranches?: boolean;
-  hasDifferentBranchLogos?: boolean;
-  contactPerson?: { name?: string; cpf?: string | null };
-  branches?: { id: string; name: string; taxId?: string | null }[];
-};
-
 type Props = {
   slug: string;
-  s1?: { company?: S1Company };
+  s1?: { company?: WizardEmpresaS1Company };
   form: ReturnType<typeof Form.useForm>[0];
 };
 
@@ -189,7 +178,7 @@ export function WizardEmpresaCadastro({ slug, s1, form }: Props) {
   });
 
   const saveDraftOnly = () => {
-    const v = form.getFieldsValue();
+    const v = form.getFieldsValue() as Record<string, unknown>;
     saveEmpresaCadastroDraft(slug, v);
     message.success('Rascunho guardado neste navegador. Você pode continuar depois.');
   };
@@ -229,7 +218,7 @@ export function WizardEmpresaCadastro({ slug, s1, form }: Props) {
           message="Identificação do cliente"
           description="Esse nome é usado apenas no sistema para reconhecer a empresa."
         />
-        <Form form={form} layout="vertical" onFinish={(v) => mClient.mutate(v)}>
+        <Form form={form} layout="vertical" onFinish={(v) => mClient.mutate(v as { clientDisplayName: string })}>
           <Form.Item
             label={
               <FieldHelp
@@ -266,7 +255,7 @@ export function WizardEmpresaCadastro({ slug, s1, form }: Props) {
         <Typography.Link href="https://www.gov.br/receitafederal/pt-br" target="_blank" rel="noreferrer">
           Receita Federal — Comprovante de Inscrição e Situação Cadastral
         </Typography.Link>
-        <Form form={form} layout="vertical" onFinish={(v) => mMatrix.mutate(v)}>
+        <Form form={form} layout="vertical" onFinish={(v) => mMatrix.mutate(v as Record<string, string>)}>
           <Form.Item
             label={
               <FieldHelp
@@ -477,7 +466,7 @@ export function WizardEmpresaCadastro({ slug, s1, form }: Props) {
     return (
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
         {exampleModal}
-        <Form form={form} layout="vertical" onFinish={(v) => mBranchesCfg.mutate(v)}>
+        <Form form={form} layout="vertical" onFinish={(v) => mBranchesCfg.mutate(v as { hasBranches: boolean })}>
           <Form.Item
             label={<FieldHelp title="A empresa possui filiais?" help="Se sim, cadastre filiais e anexe CNPJs." />}
             name="hasBranches"
@@ -596,7 +585,7 @@ export function WizardEmpresaCadastro({ slug, s1, form }: Props) {
     return (
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
         {exampleModal}
-        <Form form={form} layout="vertical" onFinish={(v) => mBranding.mutate(v)}>
+        <Form form={form} layout="vertical" onFinish={(v) => mBranding.mutate(v as { hasDifferentBranchLogos: boolean })}>
           <Form.Item
             label={
               <FieldHelp
@@ -691,7 +680,8 @@ export function WizardEmpresaCadastro({ slug, s1, form }: Props) {
 function WizardEmpresaCadastroResumo({ onSubmit, loading }: { onSubmit: () => void; loading: boolean }) {
   const { data } = useQuery({
     queryKey: ['w1sum'],
-    queryFn: async () => unwrap(await api.get(`${WIZARD_DOMINIO_REST_PREFIX.empresaCadastro}/summary`)),
+    queryFn: async () =>
+      unwrap<WizardEmpresaEtapa1SummaryPayload>(await api.get(`${WIZARD_DOMINIO_REST_PREFIX.empresaCadastro}/summary`)),
   });
   const labels: Record<string, string> = {
     clientNamed: 'Nome do cliente / empresa informado',

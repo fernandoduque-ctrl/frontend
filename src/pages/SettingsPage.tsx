@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import { App, Card, Form, Switch, Button, Select, Typography } from 'antd';
+import { App, Card, Form, Switch, Button, Select, Typography } from '@/ds';
 import { api, unwrap } from '@/services/api';
 import { me } from '@/services/auth.service';
 import { ACTIVE_COMPANY_ID_KEY } from '@/constants/storageKeys';
@@ -9,6 +9,9 @@ const settingsFormDefaults: Record<string, unknown> = {
   notificationsEmail: false,
   darkSidebar: true,
 };
+
+/** Corpo JSON do GET /settings (não é o envelope ApiSuccess). */
+type SettingsGetBody = { data: Record<string, unknown> };
 
 export function SettingsPage() {
   const { message } = App.useApp();
@@ -24,7 +27,7 @@ export function SettingsPage() {
   }, []);
   const { data } = useQuery({
     queryKey: ['settings'],
-    queryFn: async () => unwrap(await api.get('/settings')),
+    queryFn: async () => unwrap<SettingsGetBody>(await api.get('/settings')),
   });
 
   useEffect(() => {

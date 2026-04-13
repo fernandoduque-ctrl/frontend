@@ -1,8 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { Button, Card, Space, Table, Tabs, Typography } from 'antd';
+import { Button, Card, Space, Table, Tabs, Typography } from '@/ds';
 import { useParams } from 'react-router-dom';
 import { api, unwrap } from '@/services/api';
+import type {
+  EsocialAlertItem,
+  EsocialBatchDetailPayload,
+  EsocialBatchPreviewPayload,
+} from '@/types/apiResponses';
 import { downloadAuthenticatedTextFile } from '@/utils/downloadText';
 import { ESOC_BATCH_KEY } from '@/constants/storageKeys';
 
@@ -10,17 +15,20 @@ export function EsocialLotePage() {
   const { batchId } = useParams<{ batchId: string }>();
   const { data: batch } = useQuery({
     queryKey: ['batch', batchId],
-    queryFn: async () => unwrap(await api.get(`/esocial-import/batches/${batchId}`)),
+    queryFn: async () =>
+      unwrap<EsocialBatchDetailPayload>(await api.get(`/esocial-import/batches/${batchId}`)),
     enabled: !!batchId,
   });
   const { data: preview } = useQuery({
     queryKey: ['batch-prev', batchId],
-    queryFn: async () => unwrap(await api.get(`/esocial-import/batches/${batchId}/preview`)),
+    queryFn: async () =>
+      unwrap<EsocialBatchPreviewPayload>(await api.get(`/esocial-import/batches/${batchId}/preview`)),
     enabled: !!batchId,
   });
   const { data: alerts } = useQuery({
     queryKey: ['batch-alerts', batchId],
-    queryFn: async () => unwrap(await api.get(`/esocial-import/batches/${batchId}/alerts`)),
+    queryFn: async () =>
+      unwrap<EsocialAlertItem[]>(await api.get(`/esocial-import/batches/${batchId}/alerts`)),
     enabled: !!batchId,
   });
 

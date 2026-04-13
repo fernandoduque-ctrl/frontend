@@ -1,4 +1,4 @@
-import { Card, Col, Progress, Row, Steps, Typography, Tag, theme } from 'antd';
+import { Card, Col, Progress, Row, Steps, Typography, Tag, theme } from '@/ds';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { WIZARD_ETAPA_META, wizardEtapaPath } from '@/constants/wizardEtapaMeta';
 

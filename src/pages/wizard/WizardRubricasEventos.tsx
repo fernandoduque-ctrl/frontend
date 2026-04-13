@@ -12,7 +12,7 @@ import {
   Typography,
   Upload,
   App,
-} from 'antd';
+} from '@/ds';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api, unwrap } from '@/services/api';

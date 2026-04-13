@@ -15,11 +15,12 @@ import {
   Typography,
   Upload,
   App,
-} from 'antd';
+} from '@/ds';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UploadOutlined } from '@ant-design/icons';
 import { api, unwrap } from '@/services/api';
+import type { BenefitSupplierListItem } from '@/types/apiResponses';
 import { slugToBackendStepNumber } from '@/utils/wizardSteps';
 import { maskCnpj, onlyDigits } from '@/utils/brForm';
 
@@ -67,7 +68,7 @@ export function WizardBeneficios({ slug }: { slug: string }) {
   });
   const { data: suppliers } = useQuery({
     queryKey: ['benefit-suppliers'],
-    queryFn: async () => unwrap(await api.get('/benefit-suppliers')),
+    queryFn: async () => unwrap<BenefitSupplierListItem[]>(await api.get('/benefit-suppliers')),
     enabled: slug === 'passo-6' || slug === 'resumo',
   });
 
@@ -544,12 +545,10 @@ export function WizardBeneficios({ slug }: { slug: string }) {
             style={{ width: '100%', maxWidth: 400, marginBottom: 12 }}
             value={layoutSupplierId}
             onChange={(v) => setLayoutSupplierId(v)}
-            options={(suppliers as { id: string; name: string; benefit?: { internalName?: string } }[] | undefined)?.map(
-              (s) => ({
-                value: s.id,
-                label: `${s.name}${s.benefit?.internalName ? ` — ${s.benefit.internalName}` : ''}`,
-              }),
-            )}
+            options={suppliers?.map((s) => ({
+              value: s.id,
+              label: `${s.name}${s.benefit?.internalName ? ` — ${s.benefit.internalName}` : ''}`,
+            }))}
           />
           <Upload
             disabled={!layoutSupplierId}

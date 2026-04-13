@@ -1,4 +1,4 @@
-import { Card, Typography, theme } from 'antd';
+import { Card, Typography, theme } from '@/ds';
 import { ReactNode } from 'react';
 
 export function AuthLayout({ children }: { children: ReactNode }) {

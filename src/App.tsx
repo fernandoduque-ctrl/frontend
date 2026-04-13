@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { HashRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { Spin } from 'antd';
+import { Spin } from '@/ds';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { AppShell } from '@/layouts/AppShell';
 import { WizardStageLayout } from '@/layouts/WizardStageLayout';

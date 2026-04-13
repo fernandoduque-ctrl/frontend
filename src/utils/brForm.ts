@@ -89,7 +89,7 @@ export function isValidCnpj(raw: string): boolean {
   const w2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
   let sum = 0;
   for (let i = 0; i < 12; i++) sum += parseInt(cnpj[i], 10) * w1[i];
-  let d1 = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  const d1 = sum % 11 < 2 ? 0 : 11 - (sum % 11);
   if (d1 !== parseInt(cnpj[12], 10)) return false;
   sum = 0;
   for (let i = 0; i < 13; i++) sum += parseInt(cnpj[i], 10) * w2[i];

@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ConfigProvider, App as AntApp } from 'antd';
-import ptBR from 'antd/locale/pt_BR';
+import { ConfigProvider, App as AntApp, ptBR } from '@/ds';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
