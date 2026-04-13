@@ -1,7 +1,8 @@
-import { Card, Typography } from 'antd';
+import { Card, Typography, theme } from 'antd';
 import { ReactNode } from 'react';
 
 export function AuthLayout({ children }: { children: ReactNode }) {
+  const { token } = theme.useToken();
   return (
     <div
       style={{
@@ -9,12 +10,26 @@ export function AuthLayout({ children }: { children: ReactNode }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(145deg, #0f3d3e 0%, #1a5f61 45%, #0a2a2b 100%)',
+        background: token.colorBgLayout,
         padding: 24,
       }}
     >
-      <Card style={{ width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(0,0,0,0.2)' }}>
-        <Typography.Title level={3} style={{ marginTop: 0, color: '#0f3d3e' }}>
+      <Card
+        style={{
+          width: '100%',
+          maxWidth: 420,
+          boxShadow: `0 8px 32px rgba(112, 38, 112, 0.08)`,
+          borderColor: token.colorBorder,
+        }}
+      >
+        <img
+          src="/images/logo.svg"
+          alt="Sólides"
+          width={103}
+          height={24}
+          style={{ display: 'block', marginBottom: 16 }}
+        />
+        <Typography.Title level={3} style={{ marginTop: 0, color: token.colorPrimary, fontWeight: 700 }}>
           Folha Digital Sólides
         </Typography.Title>
         <Typography.Paragraph type="secondary" style={{ marginBottom: 24 }}>

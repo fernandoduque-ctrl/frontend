@@ -14,15 +14,25 @@ import {
   LogoutOutlined,
   ApartmentOutlined,
 } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ACTIVE_COMPANY_ID_KEY, TOKEN_KEY } from '@/constants/storageKeys';
+import { api, unwrap } from '@/services/api';
 
 const { Header, Sider, Content } = Layout;
+
+type SettingsPayload = { data: Record<string, unknown> };
 
 export function AppShell() {
   const nav = useNavigate();
   const loc = useLocation();
   const { token } = theme.useToken();
+  const { data: settingsRes } = useQuery({
+    queryKey: ['settings'],
+    queryFn: async () => unwrap(await api.get('/settings')) as SettingsPayload,
+  });
+  /** Preferência global salva em `/settings`; ausência ou `true` = menu escuro (comportamento anterior). */
+  const darkSidebar = settingsRes?.data?.darkSidebar !== false;
 
   const selected = loc.pathname.startsWith('/wizard')
     ? ['/wizard']
@@ -30,20 +40,36 @@ export function AppShell() {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider breakpoint="lg" collapsedWidth={0} width={240} theme="dark">
+      <Sider breakpoint="lg" collapsedWidth={0} width={240} theme={darkSidebar ? 'dark' : 'light'}>
         <div
           style={{
-            padding: '20px 16px',
-            fontWeight: 700,
-            color: '#fff',
-            fontSize: 15,
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
+            padding: '16px 16px 14px',
+            borderBottom: darkSidebar
+              ? '1px solid rgba(255,255,255,0.08)'
+              : `1px solid ${token.colorBorderSecondary}`,
           }}
         >
-          Sólides Folha
+          <img
+            src="/images/logo.svg"
+            alt="Sólides"
+            width={103}
+            height={24}
+            style={{ display: 'block', marginBottom: 10, maxWidth: '100%', height: '1.75rem', width: 'auto' }}
+          />
+          <Typography.Text
+            strong
+            style={{
+              display: 'block',
+              fontSize: 13,
+              color: darkSidebar ? 'rgba(255,255,255,0.92)' : token.colorPrimary,
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Folha Digital
+          </Typography.Text>
         </div>
         <Menu
-          theme="dark"
+          theme={darkSidebar ? 'dark' : 'light'}
           mode="inline"
           selectedKeys={selected}
           items={[

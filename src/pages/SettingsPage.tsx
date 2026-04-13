@@ -5,9 +5,15 @@ import { api, unwrap } from '@/services/api';
 import { me } from '@/services/auth.service';
 import { ACTIVE_COMPANY_ID_KEY } from '@/constants/storageKeys';
 
+const settingsFormDefaults: Record<string, unknown> = {
+  notificationsEmail: false,
+  darkSidebar: true,
+};
+
 export function SettingsPage() {
   const { message } = App.useApp();
   const qc = useQueryClient();
+  const [form] = Form.useForm();
   const [activeCompanyId, setActiveCompanyId] = useState<string | undefined>(() =>
     localStorage.getItem(ACTIVE_COMPANY_ID_KEY) || undefined,
   );
@@ -20,6 +26,11 @@ export function SettingsPage() {
     queryKey: ['settings'],
     queryFn: async () => unwrap(await api.get('/settings')),
   });
+
+  useEffect(() => {
+    if (!data?.data) return;
+    form.setFieldsValue({ ...settingsFormDefaults, ...data.data });
+  }, [data, form]);
   const { data: profile } = useQuery({
     queryKey: ['me'],
     queryFn: () => me(),
@@ -67,9 +78,10 @@ export function SettingsPage() {
         </Card>
       )}
       <Form
+        form={form}
         layout="vertical"
-        initialValues={data?.data ?? {}}
-        onFinish={(v) => save.mutate(v)}
+        initialValues={settingsFormDefaults}
+        onFinish={(v) => save.mutate(v as Record<string, unknown>)}
       >
         <Form.Item label="Notificações por e-mail" name="notificationsEmail" valuePropName="checked">
           <Switch />
