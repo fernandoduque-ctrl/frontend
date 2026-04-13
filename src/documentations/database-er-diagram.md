@@ -1,6 +1,6 @@
 # Diagrama do banco de dados (Prisma)
 
-Gerado a partir de `backend/prisma/schema.prisma` (SQLite).  
+Gerado a partir de `backend/prisma/schema.prisma` (PostgreSQL).  
 Enums e domínios de string estão em `backend/src/common/prisma-enums.ts`.
 
 ## Visão geral — núcleo, usuários e arquivos

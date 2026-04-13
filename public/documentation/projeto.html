@@ -90,13 +90,16 @@
         <h3>Banco de dados</h3>
         <ul>
           <li>
-            <strong>SQLite</strong> no <code>schema.prisma</code> atual (<code>DATABASE_URL</code>) — adequado a dev/MVP local.
+            <strong>PostgreSQL</strong> via Prisma (<code>provider = "postgresql"</code> e <code>DATABASE_URL</code> no <code>.env</code>).
           </li>
           <li>
-            O schema é <strong>portátil</strong>: comentário no Prisma indica troca de <code>provider</code> e URL para
-            <strong>PostgreSQL</strong>, MySQL ou SQL Server em outros ambientes.
+            Migrações em <code>backend/prisma/migrations/</code>; em dev: <code>npx prisma migrate dev</code> após criar o banco; seed: <code>npm run db:seed</code>.
           </li>
-          <li>Enums de domínio no SQLite ficam como <code>String</code>; constantes espelhadas em <code>src/common/prisma-enums.ts</code> no backend.</li>
+          <li>
+            Postgres em máquina local: no repositório <code>backend</code>, <code>docker compose -f docker-compose.postgres.yml up -d</code>
+            e <code>DATABASE_URL</code> conforme <code>.env.example</code>.
+          </li>
+          <li>Enums de domínio persistidos como <code>String</code>; constantes em <code>src/common/prisma-enums.ts</code> no backend.</li>
         </ul>
 
         <h3>Integração front ↔ back</h3>
